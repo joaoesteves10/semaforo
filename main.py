@@ -92,6 +92,8 @@ while running:
             pygame.draw.rect(screen, "black", pygame.Rect(w, h, 200, 200), 2)
             w += 200
         h += 200
+    pygame.draw.rect(screen, "black", pygame.Rect(240, 80, 800, 600), 4)
+        
 
     pygame.display.flip()
 
