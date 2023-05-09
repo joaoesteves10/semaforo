@@ -1,4 +1,4 @@
-import sys, os, random
+import sys, os, random, pygame
 from termcolor import colored, cprint
 
 gameData = {
@@ -6,6 +6,7 @@ gameData = {
     "turn": 0,
     "board": [[],[],[]] # board como lista de listas, cada lista representa uma linha, board[1][2] é a segunda linha, terceira coluna
 }
+
 
 
 def clear():
@@ -71,4 +72,29 @@ def novoJogoPvP(gameData):
     gameData["turn"] = random.randint(0,1)
     print(f"O jogador", gameData["playerNames"][gameData["turn"]], "joga primeiro.")
 
-mainMenu()
+pygame.init()
+screen = pygame.display.set_mode((1280, 720))
+clock = pygame.time.Clock()
+running = True
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: # sair
+            running = False
+
+    screen.fill("white")
+
+    # board de teste
+    h = 80 # start height
+    while h < 600:
+        w = 240 # start width
+        while w < 1000:
+            pygame.draw.rect(screen, "black", pygame.Rect(w, h, 200, 200), 2)
+            w += 200
+        h += 200
+
+    pygame.display.flip()
+
+    clock.tick(60)
+
+pygame.quit()
