@@ -1,13 +1,11 @@
-import sys, os, random, pygame
+import sys, os, random
 from termcolor import colored, cprint
 
 gameData = {
     "playerNames": [], # lista dos nomes, playerNames[0] para o player 1, playerNames[1] para o player 2
     "turn": 0,
-    "board": [[],[],[]] # board como lista de listas, cada lista representa uma linha, board[1][2] é a segunda linha, terceira coluna
+    "board": [[0,0,0,0],[0,0,0,0],[0,0,0,0]] # board como lista de listas, cada lista representa uma linha, board[1][2] é a segunda linha, terceira coluna
 }
-
-
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -38,65 +36,75 @@ def mainMenu():
             print("opção inválida")
             mainMenu()
 
-"""
-A. Caso o utilizador selecione a opção A devem ser realizadas as seguintes operações:
-1. Pedir o Nome do jogador.
-2. Selecionar aleatoriamente quem é o primeiro jogador, humano ou BOT.
-3. Construir a interface do jogo, ou seja, desenhar na consola todos os elementos
-necessários para visualizar o desenrolar da partida:
-a. O tabuleiro de jogo.
-b. Identificar cada jogador pela cor com que vai jogar.
-4. Realizar o turno do primeiro jogador. Considera-se um turno de um jogador o conjunto
-das ações que esse jogador executa até passar a vez ao jogador seguinte ou até o jogo
-terminar. Só devem ser autorizadas as ações possíveis em cada fase.
-a. Quando for o jogador humano a jogar seguir a sequência da jogada:
-I. Escolher uma peça
-II. Escolher o posicionamento
-III. Passar a vez
-IV. Sair (além de interromper o jogo deve gravar o estado do mesmo).
-b. Quando for o Jogador BOT a jogar, aplicar um algoritmo para o BOT mostrando
-as ações escolhidas pelo mesmo.
-c. Tomada a decisão da ação escolhida (humano ou BOT), realizá-la e atualizar a
-consola com os novos dados.
-d. Depois de uma ação de qualquer Jogador (Humano ou BOT) gravar SEMPRE o
-estado atual do jogo, de modo a ser possível dar a opção do jogador de
-interromper para continuar mais tarde.
-e. Todas as ações dos jogadores devem ser mantidas em memória, apresentando
-na consola as ações do último turno dos dois jogadores.
-5. Repetir alternadamente os turnos dos jogadores até que ocorra o final da partida.
-6. Apresentar o vencedor do jogo.
-"""
+def printBoard(gameData):
+    print("  1 | 2 | 3 | 4 |")
+    for i in range(3):
+        print(i+1, end=" ")
+        for j in range(4):
+            printPiece(gameData["board"][i][j])
+            print(" | ", end="")
+        print()
+
+def printPiece(piece):
+    match piece:
+        case 0: print(colored(" ", "white"), end="")
+        case 1: print(colored("1", "green"), end="")
+        case 2: print(colored("2", "yellow"), end="")
+        case 3: print(colored("3", "red"), end="")
+
 def novoJogoPvP(gameData):
     gameData["playerNames"].append(input("Nome do jogador 1: "))
     gameData["playerNames"].append(input("Nome do jogador 2: "))
     gameData["turn"] = random.randint(0,1)
     print(f"O jogador", gameData["playerNames"][gameData["turn"]], "joga primeiro.")
+    gameLoop(gameData)
 
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-clock = pygame.time.Clock()
-running = True
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT: # sair
-            running = False
+def checkWin(gameData):
+    return False
 
-    screen.fill("white")
+def checkAvailablePieces(gameData, play):
+    counts = {
+        0: 0,
+        1: 0,
+        2: 0,
+        3: 0
+    }
 
-    # board de teste
-    h = 80 # start height
-    while h < 600:
-        w = 240 # start width
-        while w < 1000:
-            pygame.draw.rect(screen, "black", pygame.Rect(w, h, 200, 200), 2)
-            w += 200
-        h += 200
-    pygame.draw.rect(screen, "black", pygame.Rect(240, 80, 800, 600), 4)
-        
+    testGameBoard = []
+    for bl in gameData["board"]:
+        testGameBoard.append(bl.copy())
+    testGameBoard[int(play[0])-1][int(play[1])-1] += 1
+    for i in range(3):
+        for j in range(4):
+            counts[testGameBoard[i][j]] += 1
 
-    pygame.display.flip()
+    del counts[0]
+    for i in counts.values():
+        if i > 8:
+            return False
 
-    clock.tick(60)
+    return True
 
-pygame.quit()
+
+
+def gameLoop(gameData):
+    while not checkWin(gameData):
+        clear()
+        printBoard(gameData)
+        while True:
+            play = input("Jogador " + gameData["playerNames"][gameData["turn"]] + " (linha, coluna): ")
+
+            if len(play) == 2 and play[0] in "123" and play[1] in "1234":
+                if gameData["board"][int(play[0])-1][int(play[1])-1] == 3:
+                    print("jogada inválida, não pode substituir uma peça vermelha")
+                elif not checkAvailablePieces(gameData, play):
+                    print("jogada inválida, não há peças disponíveis")
+                else:
+                    gameData["board"][int(play[0])-1][int(play[1])-1] += 1
+                    break
+            else:
+                print("jogada inválida")
+        gameData["turn"] = (gameData["turn"] + 1) % 2
+
+mainMenu()
