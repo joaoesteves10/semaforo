@@ -10,7 +10,6 @@ pygame_icon = pygame.image.load("stardewPanorama.png")
 pygame.display.set_icon(pygame_icon)
 n = 1
 
-
 def menu():
  image = pygame.image.load("stardewPanorama.png")
  screenUpdate = pygame.transform.scale_by(image, 2.7)
@@ -35,7 +34,6 @@ screen.blit(my_image6, (200, 120), (128 * 3, 384 * 3, 9 * 3, 8 * 3))
 my_image3 = pygame.image.load("TitleButtons.pt-BR.png")
 my_image4 = pygame.transform.scale_by(my_image3, 2.5)
 
-
 while True:
     mouse = pygame.mouse.get_pos()
     for ev in pygame.event.get():
@@ -43,13 +41,7 @@ while True:
             sound = pygame.mixer.Sound("onlymp3.to - Video Game Beep - Sound Effect-B14L61fYZlc-256k-1656775583625.mp3")
             pygame.mixer.Sound.play(sound)
 
-            if 1170 <= mouse[0] <= 1170 + 74 * 2.5 and 650 <= mouse[1]<= 650 + 58 * 2.5:
-                pygame.quit()
-
-            if 970 <= mouse[0] <= 970 + 74 * 2.5 and 650 <= mouse[1]<= 650 + 58 * 2.5:
-                pygame.quit()
-
-            if 770 <= mouse[0] <= 770 + 74 * 2.5 and 650 <= mouse[1]<= 650 + 58 * 2.5:
+            if 200 <= mouse[0] <= 200 + 9 * 3 and 120 <= mouse[1]<= 120 + 8 * 3:
                 n = n + 1
 
                 if (n % 2) == 0:
@@ -60,6 +52,15 @@ while True:
                     pygame.mixer.music.unpause()
                     menu()
                     screen.blit(my_image6, (200, 120), (128 * 3, 384 * 3, 9 * 3, 8 * 3))
+
+            if 1170 <= mouse[0] <= 1170 + 74 * 2.5 and 650 <= mouse[1]<= 650 + 58 * 2.5:
+                pygame.quit()
+
+            if 970 <= mouse[0] <= 970 + 74 * 2.5 and 650 <= mouse[1]<= 650 + 58 * 2.5:
+                pygame.quit()
+
+            if 770 <= mouse[0] <= 770 + 74 * 2.5 and 650 <= mouse[1]<= 650 + 58 * 2.5:
+                pygame.quit()
 
             if 570 <= mouse[0] <= 570 + 74 * 2.5 and 650 <= mouse[1]<= 650 + 58 * 2.5:
                 pygame.quit()
@@ -90,13 +91,13 @@ while True:
     else:
         screen.blit(my_image4, (570, 650), (222 * 2.5-74*7.5, 245 * 2.5-58 * 2.5, 74 * 2.5, 58 * 2.5))
 
-    if  1650 <= mouse[0] <= 1650 + 22 * 2.5 and 800 <= mouse[1] <= 800 + 25 * 2.5:
-        screen.blit(my_image4, (1650, 800), (8 * 2.5 + 22 * 2.5, 458 * 2.5 , 22 * 2.5, 25 * 2.5))
+    if  1590 <= mouse[0] <= 1590 + 22 * 2.5 and 900 <= mouse[1] <= 900 + 25 * 2.5:
+        screen.blit(my_image4, (1590, 900), (8 * 2.5 + 22 * 2.5, 458 * 2.5 , 22 * 2.5, 25 * 2.5))
     else:
-        screen.blit(my_image4, (1650, 800), (8 * 2.5, 458 * 2.5, 22 * 2.5, 25 * 2.5))
+        screen.blit(my_image4, (1590, 900), (8 * 2.5, 458 * 2.5, 22 * 2.5, 25 * 2.5))
 
     if  1650 <= mouse[0] <= 1650 + 27 * 2.5 and 880 <= mouse[1] <= 880 + 25 * 2.5:
-        screen.blit(my_image4, (1650, 880), (52 * 2.5 + 27 * 2.5, 458 * 2.5, 27 * 2.5, 25 * 2.5))
+        screen.blit(my_image4, (1650, 900), (52 * 2.5 + 27 * 2.5, 458 * 2.5, 27 * 2.5, 25 * 2.5))
     else:
-        screen.blit(my_image4, (1650, 880), (52 * 2.5, 458 * 2.5, 27 * 2.5, 25 * 2.5))
+        screen.blit(my_image4, (1650, 900), (52 * 2.5, 458 * 2.5, 27 * 2.5, 25 * 2.5))
     pygame.display.flip()
