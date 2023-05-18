@@ -25,6 +25,9 @@ def menu():
  my_image2 = pygame.transform.scale_by(my_image, 2)
  screen.blit(my_image2, (560, 200))
 
+ my_image3 = pygame.image.load("TitleButtons.pt-BR.png")
+ my_image4 = pygame.transform.scale_by(my_image3, 2.5)
+ screen.blit(my_image4, (1170, 650), (222 * 2.5, 245 * 2.5, 74 * 2.5, 58 * 2.5))
 menu()
 
 my_image5 = pygame.image.load("Cursors.pt-BR.png")
@@ -65,10 +68,12 @@ while True:
             if 570 <= mouse[0] <= 570 + 74 * 2.5 and 650 <= mouse[1]<= 650 + 58 * 2.5:
                 pygame.quit()
 
-            if 1650 <= mouse[0] <= 1650 + 22 * 2.5 and 800 <= mouse[1]<= 800 + 25 * 2.5:
-                pygame.quit()
+            if 1590 <= mouse[0] <= 1590 + 22 * 2.5 and 900 <= mouse[1]<= 900 + 25 * 2.5:
+                image = pygame.image.load("SpecialOrdersBoard.png")
+                image2 = pygame.transform.scale_by(image, 3)
+                screen.blit(image2, (592, 300), (0 , 0 , 336 * 3 , 197 * 3))
 
-            if 1650 <= mouse[0] <= 1650 + 27 * 2.5 and 880 <= mouse[1]<= 880 + 25 * 2.5:
+            if 1650 <= mouse[0] <= 1650 + 27 * 2.5 and 900 <= mouse[1]<= 900 + 25 * 2.5:
                 pygame.quit()
 
     if 1170 <= mouse[0] <= 1170 + 74 * 2.5 and 650 <= mouse[1] <= 650 + 58 * 2.5:
