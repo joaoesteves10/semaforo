@@ -101,3 +101,4 @@ def autoSave(gameData):
 def loadGame():
     with open("save.json", "r") as saveFile:
         games = json.load(saveFile)
+        return games[-1]
