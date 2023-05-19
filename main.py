@@ -66,9 +66,7 @@ pygame_icon = assets[lang]["logo"]
 pygame.display.set_icon(pygame_icon)
 n = 1
 
-buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5)
 cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
-
 pygame.mixer.music.load(assets["welcomeToTheMato"])
 pygame.mixer.music.set_volume(0.1)
 pygame.mixer.music.play(0)
@@ -95,7 +93,12 @@ def toggleMusic():
     )
     muteButton.draw(screen)
 
-def menuPrincipal():
+def menuPrincipal(running=True):
+
+    global lang
+
+    buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5)
+
     bgImage = pygame.transform.scale_by(assets["background"], 2.7)
     screen.blit(bgImage, (190, -100))
 
@@ -152,7 +155,7 @@ def menuPrincipal():
     languageButton.draw(screen)
 
     clock = pygame.time.Clock()
-    running = True
+
     while running:
         for ev in pygame.event.get():
 
@@ -180,9 +183,11 @@ def menuPrincipal():
                 continue
 
             if languageButton.is_clicked(ev):
-                continue
+                lang = "en" if lang == "pt" else "pt"
+                running = False
 
         pygame.display.flip()
         clock.tick(FPS)
 
-menuPrincipal()
+while True:
+    menuPrincipal()
