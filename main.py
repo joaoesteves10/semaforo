@@ -6,7 +6,7 @@ assets = {
     "pt": {
         "buttons": pygame.image.load("./assets/pt/TitleButtons.png"),
         "cursors": pygame.image.load("./assets/pt/Cursors.png"),
-        "logo": pygame.image.load("./assets/pt/logo.png"),
+        "logo": pygame.image.load("./assets/pt/novalogo2.png"),
     },
     "en": {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
@@ -105,10 +105,10 @@ def menuPrincipal(running=True):
     clouds = pygame.transform.scale_by(assets["clouds"], 2*(2147/1920))
     screen.blit(clouds, (100, 200), (0*2*(2147/1920), 470*2*(2147/1920) , 150*2*(2147/1920), 80*2*(2147/1920)))
     screen.blit(clouds, (1700, 200), (150*2*(2147/1920), 430*2*(2147/1920) , 150*2*(2147/1920), 80*2*(2147/1920)))
-    screen.blit(clouds, (1400, 400), (400*2*(2147/1920), 465*2*(2147/1920) , 140*2*(2147/1920), 70*2*(2147/1920)))
+    screen.blit(clouds, (1450, 400), (400*2*(2147/1920), 465*2*(2147/1920) , 140*2*(2147/1920), 70*2*(2147/1920)))
 
     logo = pygame.transform.scale_by(assets[lang]["logo"], 490/200)
-    screen.blit(logo, (468, 100))
+    screen.blit(logo, (370, 120))
 
     muteButton.draw(screen)
 
