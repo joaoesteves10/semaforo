@@ -1,5 +1,23 @@
 import pygame
 
+assets = {
+    "pt": {
+        "buttons": pygame.image.load("./assets/pt/TitleButtons.png"),
+        "cursors": pygame.image.load("./assets/pt/Cursors.png"),
+        "logo": pygame.image.load("./assets/pt/logo.png"),
+    },
+    "en": {
+        "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
+        "cursors": pygame.image.load("./assets/en/Cursors.png"),
+        "logo": pygame.image.load("./assets/en/logo.png"),
+    },
+    "clouds": pygame.image.load("./assets/global/Clouds.png"),
+    "background": pygame.image.load("./assets/global/stardewPanorama.png"),
+    "specialOrdersBoard": pygame.image.load("./assets/global/SpecialOrdersBoard.png"),
+    "welcomeToTheMato": "./assets/music/welcomeToTheMato.mp3",
+    "click": "./assets/sounds/click.mp3"
+}
+
 class Button(object):
     def __init__(self, position, size, image, image_hover=None, image_down=None):
 
@@ -30,23 +48,12 @@ class Button(object):
     def is_clicked(self, event):
         self.is_hovered(event)
         if event.type == pygame.MOUSEBUTTONDOWN:
-            clickSound = pygame.mixer.Sound("onlymp3.to - Video Game Beep - Sound Effect-B14L61fYZlc-256k-1656775583625.mp3")
+            clickSound = pygame.mixer.Sound(assets["click"])
             pygame.mixer.Sound.set_volume(clickSound, 0.2)
             pygame.mixer.Sound.play(clickSound)
             if event.button == 1:
                 screen.blit(self.image_down[0], self.rect, self.image_down[1])
                 return self.rect.collidepoint(event.pos)
-
-assets = {
-    "pt": {
-        "buttons": pygame.image.load("TitleButtons.pt-BR.png"),
-        "cursors": pygame.image.load("Cursors.pt-BR.png"),
-        "logo": pygame.image.load("logo.png"),
-        "specialOrdersBoard": pygame.image.load("SpecialOrdersBoard.png"),
-    },
-    "clouds": pygame.image.load("Clouds.png"),
-    "background": pygame.image.load("stardewPanorama.png")
-}
 
 pygame.init()
 
@@ -62,9 +69,9 @@ n = 1
 buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5)
 cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
 
-pygame.mixer.music.load("onlymp3.to - Marco Brasil Filho - Welcome To The Mato ft. Dj Kevin (Clipe Oficial)-MbEcjsE0UOc-256k-1655037402619.mp3")
-pygame.mixer.music.play(0)
+pygame.mixer.music.load(assets["welcomeToTheMato"])
 pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(0)
 muteButtonAsset = {
     "muted": (137 * 3, 384 * 3, 9 * 3, 8 * 3),
     "unmuted": (128 * 3, 384 * 3, 9 * 3, 8 * 3),
