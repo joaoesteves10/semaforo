@@ -97,7 +97,8 @@ def toggleMusic():
     )
     muteButton.draw(screen)
 
-def menuPrincipal():
+def menuPrincipal(running=True):
+    global lang
     bgImage = pygame.transform.scale_by(assets["background"], 3*(2147/1920))
     screen.blit(bgImage, (0, -250))
 
