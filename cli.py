@@ -1,5 +1,5 @@
-import sys, os, random
-from termcolor import colored, cprint
+import sys, os
+from termcolor import colored
 import logicaSemaforo as s
 
 def clear():
