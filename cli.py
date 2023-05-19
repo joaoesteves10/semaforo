@@ -1,4 +1,5 @@
 import sys, os
+from datetime import datetime
 from termcolor import colored
 import logicaSemaforo as s
 
@@ -53,10 +54,36 @@ def novoJogoPvP():
     gameData = s.initGameData(player1, player2)
     gameLoop(gameData)
 
-
 def carregarJogo():
-    gameData = s.loadGame()
-    gameLoop(gameData)
+    games = s.loadGames()
+    validGamesList = []
+    for g in games:
+        print(f"Jogo {games.index(g)} iniciado em", datetime.utcfromtimestamp(g["startTime"]).strftime('%Y-%m-%d %H:%M:%S'))
+        print("Jogadores:", g["playerNames"][0], "contra", g["playerNames"][1])
+        if g["ended"]:
+            print("Jogo terminado em", datetime.utcfromtimestamp(g["history"][-1][3]).strftime('%Y-%m-%d %H:%M:%S'), "com vitória de", g["playerNames"][g["turn"]])
+        else:
+            print("Jogo em curso, é a vez de", g["playerNames"][g["turn"]])
+
+        printBoard(g)
+        print("--------------------")
+        validGamesList.append(games.index(g))
+
+    while True:
+        escolha = None
+        while (escolha not in validGamesList) and (escolha != -1):
+            escolha = int(input("Escolha um jogo pelo seu número, ou escreva -1 para escolher o mais recente: "))
+
+        if games[escolha]["ended"]:
+            watchReplay = input("Este jogo já terminou, ver replay? [s/n]: ")
+            if watchReplay == "s":
+                replayGame(games[escolha])
+                break
+            else:
+                continue
+        else:
+            gameLoop(games[escolha])
+            break
 
 def numToColor(num):
     match num:
@@ -125,4 +152,16 @@ def gameLoop(gameData):
         print(gameData["playerNames"][gameData["turn"]], "ganhou!")
     else:
         print("Jogo guardado com sucesso.")
+
+def replayGame(gameData): # melhorar
+    clear()
+    print("Replay do jogo iniciado em", datetime.utcfromtimestamp(gameData["startTime"]).strftime('%Y-%m-%d %H:%M:%S'))
+    print("Jogadores:", gameData["playerNames"][0], "contra", gameData["playerNames"][1])
+    print("Board final:")
+    printBoard(gameData)
+    print("--------------------")
+    for play in gameData["history"]:
+        print(datetime.utcfromtimestamp(play[3]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
+        printPlay(gameData, gameData["history"].index(play))
+
 mainMenu()

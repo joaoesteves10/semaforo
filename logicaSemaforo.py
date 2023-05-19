@@ -98,7 +98,6 @@ def autoSave(gameData):
     with open("autosave.json", "w") as saveFile:
         json.dump(gameData, saveFile)
 
-def loadGame():
+def loadGames():
     with open("save.json", "r") as saveFile:
-        games = json.load(saveFile)
-        return games[-1]
+        return json.load(saveFile)
