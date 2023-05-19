@@ -6,13 +6,12 @@ assets = {
     "pt": {
         "buttons": pygame.image.load("./assets/pt/TitleButtons.png"),
         "cursors": pygame.image.load("./assets/pt/Cursors.png"),
-        "logo": pygame.image.load("./assets/pt/novalogo2.png"),
     },
     "en": {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
         "cursors": pygame.image.load("./assets/en/Cursors.png"),
-        "logo": pygame.image.load("./assets/en/logo.png"),
     },
+    "logo": pygame.image.load("./assets/novalogo2.png"),
     "clouds": pygame.image.load("./assets/global/Clouds.png"),
     "background": pygame.image.load("./assets/global/stardewPanorama.png"),
     "specialOrdersBoard": pygame.image.load("./assets/global/SpecialOrdersBoard.png"),
@@ -64,7 +63,7 @@ FPS = 144
 
 screen = pygame.display.set_mode((1920, 1080)) ## tentar resolver problema das outras resoluções depois
 pygame.display.set_caption("Semáforo")
-pygame_icon = assets[lang]["logo"]
+pygame_icon = assets["logo"]
 pygame.display.set_icon(pygame_icon)
 n = 1
 
@@ -107,7 +106,7 @@ def menuPrincipal(running=True):
     screen.blit(clouds, (1700, 200), (150*2*(2147/1920), 430*2*(2147/1920) , 150*2*(2147/1920), 80*2*(2147/1920)))
     screen.blit(clouds, (1450, 400), (400*2*(2147/1920), 465*2*(2147/1920) , 140*2*(2147/1920), 70*2*(2147/1920)))
 
-    logo = pygame.transform.scale_by(assets[lang]["logo"], 490/200)
+    logo = pygame.transform.scale_by(assets["logo"], 490/200)
     screen.blit(logo, (370, 120))
 
     muteButton.draw(screen)
