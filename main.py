@@ -44,18 +44,8 @@ assets = {
         "logo": pygame.image.load("logo.png"),
         "specialOrdersBoard": pygame.image.load("SpecialOrdersBoard.png"),
     },
-    """
-    "en": {
-        "buttons": pygame.image.load("TitleButtons.en-US.png"),
-        "cursors": pygame.image.load("Cursors.en-US.png"),
-        "clouds": pygame.image.load("Clouds.png"),
-        "logo": pygame.image.load("logo.png"),
-        "bg": pygame.image.load("stardewPanorama.png"),
-        "specialOrdersBoard": pygame.image.load("SpecialOrdersBoard.png"),
-    },
-    """
     "clouds": pygame.image.load("Clouds.png"),
-    "background": pygame.image.load("stardewPanorama.png"),
+    "background": pygame.image.load("stardewPanorama.png")
 }
 
 pygame.init()
