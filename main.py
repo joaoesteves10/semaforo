@@ -11,7 +11,7 @@ assets = {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
         "cursors": pygame.image.load("./assets/en/Cursors.png"),
     },
-    "logo": pygame.image.load("./assets/novalogo2.png"),
+    "logo": pygame.image.load("./assets/global/novalogo2.png"),
     "clouds": pygame.image.load("./assets/global/Clouds.png"),
     "background": pygame.image.load("./assets/global/stardewPanorama.png"),
     "specialOrdersBoard": pygame.image.load("./assets/global/SpecialOrdersBoard.png"),
