@@ -155,7 +155,6 @@ def printPlay(gameData, play):
     print(outString)
 
 def printLastPlay(gameData):
-    print(gameData["history"])
     if gameData["history"] == []:
         print(gameData["playerNames"][gameData["turn"]], "joga primeiro.")
         return
