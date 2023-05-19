@@ -55,6 +55,39 @@ def novoJogoPvP():
     gameLoop(gameData)
 
 def carregarJogo():
+    clear()
+    print("CARREGAR JOGO ----")
+
+    if os.path.exists("autosave.json"):
+        print("Foi encontrado um jogo guardado automaticamente:")
+        continuar = ""
+        valid = False
+        try:
+            autosaved = s.loadAutoSave()
+            print(f"Jogo autosave iniciado em {datetime.utcfromtimestamp(autosaved['startTime']).strftime('%Y-%m-%d %H:%M:%S')}")
+            print("Jogadores:", autosaved["playerNames"][0], "contra", autosaved["playerNames"][1])
+            if autosaved["ended"]:
+                print("Jogo terminado em", datetime.utcfromtimestamp(autosaved["history"][-1][3]).strftime('%Y-%m-%d %H:%M:%S'), "com vitória de", autosaved["playerNames"][autosaved["turn"]])
+            else:
+                print("Jogo em curso, é a vez de", autosaved["playerNames"][autosaved["turn"]])
+            printBoard(autosaved)
+            valid = True
+        except:
+            print("Erro ao carregar o jogo guardado automaticamente; listanado jogos guardados manualmente.")
+            continuar = "n"
+
+        while valid and (continuar.lower() not in ["s", "n"]):
+            continuar = input("Deseja continuar este jogo? [s/n]: ")
+
+            if continuar.lower() == "s":
+                gameLoop(autosaved)
+                return
+            elif continuar.lower() == "n":
+                clear()
+                print("CARREGAR JOGO ----")
+            else:
+                print("Escolha inválida!")
+
     games = s.loadGames()
     validGamesList = []
     for g in games:
@@ -71,19 +104,33 @@ def carregarJogo():
 
     while True:
         escolha = None
-        while (escolha not in validGamesList) and (escolha != -1):
-            escolha = int(input("Escolha um jogo pelo seu número, ou escreva -1 para escolher o mais recente: "))
+        while (escolha not in validGamesList) and (escolha not in [-1, "back"]):
+            escolha = input("Escolha um jogo pelo seu número, ou escreva -1 para escolher o mais recente (\"back\" para voltar): ")
+            if escolha == "back":
+                mainMenu()
+                return
+            try:
+                escolha = int(escolha)
+            except:
+                print("Escolha inválida!")
+                continue
 
         if games[escolha]["ended"]:
-            watchReplay = input("Este jogo já terminou, ver replay? [s/n]: ")
-            if watchReplay == "s":
-                replayGame(games[escolha])
-                break
-            else:
-                continue
+            watchReplay = ""
+            while (watchReplay.lower() not in ["s", "n"]):
+                watchReplay = input("Este jogo já terminou, ver replay? [s/n]: ")
+
+                if continuar.lower() == "s":
+                    gameLoop(autosaved)
+                    return
+                elif continuar.lower() == "n":
+                    continue
+                else:
+                    print("Escolha inválida!")
+
         else:
             gameLoop(games[escolha])
-            break
+            return
 
 def numToColor(num):
     match num:
@@ -94,6 +141,10 @@ def numToColor(num):
 
 def printPlay(gameData, play):
     lastPlay = gameData["history"][play]
+    if lastPlay[1] == "pass":
+        print(gameData["playerNames"][lastPlay[0]], "passou a vez.")
+        return
+
     outString = gameData["playerNames"][lastPlay[0]] + " jogou em " + lastPlay[1] + ", "
     beforeColor = numToColor(lastPlay[2][0])
     afterColor = numToColor(lastPlay[2][1])
@@ -104,6 +155,7 @@ def printPlay(gameData, play):
     print(outString)
 
 def printLastPlay(gameData):
+    print(gameData["history"])
     if gameData["history"] == []:
         print(gameData["playerNames"][gameData["turn"]], "joga primeiro.")
         return
@@ -124,11 +176,15 @@ def gameLoop(gameData):
         printBoard(gameData)
         while True:
 
-            play = input("Jogador " + gameData["playerNames"][gameData["turn"]] + " (linha, coluna): ")
+            play = input("Jogador " + gameData["playerNames"][gameData["turn"]] + " (linha, coluna / \"pass\" / \"sair\"): ")
 
             if play == "sair":
                 s.saveGame(gameData)
                 inGame = False
+                break
+
+            if play == "pass":
+                s.play(gameData, play)
                 break
 
             elif len(play) == 2 and play[0] in "123" and play[1] in "1234":

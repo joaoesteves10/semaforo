@@ -71,10 +71,15 @@ def checkWin(gameData):
     return False
 
 def play(gameData, play):
+    player = gameData["turn"]
+    if play == "pass":
+        gameData["history"].append((player, play, (None, None), time.time()))
+        passarVez(gameData)
+        return gameData
+
     beforeValue = gameData["board"][int(play[0])-1][int(play[1])-1]
     gameData["board"][int(play[0])-1][int(play[1])-1] += 1
     afterValue = gameData["board"][int(play[0])-1][int(play[1])-1]
-    player = gameData["turn"]
     gameData["history"].append((player, play, (beforeValue, afterValue), time.time()))
 
     return gameData
@@ -100,4 +105,8 @@ def autoSave(gameData):
 
 def loadGames():
     with open("save.json", "r") as saveFile:
+        return json.load(saveFile)
+
+def loadAutoSave():
+    with open("autosave.json", "r") as saveFile:
         return json.load(saveFile)
