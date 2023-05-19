@@ -154,7 +154,7 @@ def menuPrincipal():
     languageButton.draw(screen)
 
     clock = pygame.time.Clock()
-    running = True
+
     while running:
         for ev in pygame.event.get():
 
@@ -182,9 +182,11 @@ def menuPrincipal():
                 continue
 
             if languageButton.is_clicked(ev):
-                continue
+                lang = "en" if lang == "pt" else "pt"
+                running = False
 
         pygame.display.flip()
         clock.tick(FPS)
 
-menuPrincipal()
+while True:
+    menuPrincipal()
