@@ -1,11 +1,12 @@
 ## módulo com a lógica para o jogo do semáforo
-import random
+import random, json
 
 def initGameData(player1, player2):
     return {
         "playerNames": [player1, player2],
         "turn": random.randint(0,1),
-        "board": [[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+        "board": [[0,0,0,0],[0,0,0,0],[0,0,0,0]],
+        "history": [] # lista de tuplas (jogador, jogada, (peça antes, peça depois))
     }
 
 def checkAvailablePieces(gameData, play):
@@ -56,3 +57,20 @@ def checkWin(gameData):
         return True
 
     return False
+
+def play(gameData, play):
+    beforeValue = gameData["board"][int(play[0])-1][int(play[1])-1]
+    gameData["board"][int(play[0])-1][int(play[1])-1] += 1
+    afterValue = gameData["board"][int(play[0])-1][int(play[1])-1]
+    player = gameData["turn"]
+    gameData["history"].append((player, play, (beforeValue, afterValue)))
+
+    return gameData
+
+def saveGame(gameData):
+    with open("save.json", "w") as saveFile:
+        json.dump(gameData, saveFile)
+
+def loadGame():
+    with open("save.json", "r") as saveFile:
+        return json.load(saveFile)

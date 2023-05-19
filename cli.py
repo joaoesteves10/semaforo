@@ -24,7 +24,7 @@ def mainMenu():
     escolha = int(input("\nEscolha uma opção: "))
     match escolha:
         case 1: novoJogoPvP() # implementar PvB e BvB depois
-        # case 2: carregarJogo() # ainda não implementado
+        case 2: carregarJogo() # ainda não implementado
         case 3: regras()
         case 4: sys.exit()
         case _:
@@ -51,31 +51,76 @@ def novoJogoPvP():
     player1 = input("Nome do jogador 1: ")
     player2 = input("Nome do jogador 2: ")
     gameData = s.initGameData(player1, player2)
-    print(f"O jogador", gameData["playerNames"][gameData["turn"]], "joga primeiro.")
-    input("Prima ENTER para começar o jogo.")
     gameLoop(gameData)
 
+
+def carregarJogo():
+    gameData = s.loadGame()
+    gameLoop(gameData)
+
+def numToColor(num):
+    match num:
+        case 1: return "verde"
+        case 2: return "amarela"
+        case 3: return "vermelha"
+        case _: return None
+
+def printPlay(gameData, play):
+    lastPlay = gameData["history"][play]
+    outString = gameData["playerNames"][lastPlay[0]] + " jogou em " + lastPlay[1] + ", "
+    beforeColor = numToColor(lastPlay[2][0])
+    afterColor = numToColor(lastPlay[2][1])
+    if beforeColor == None:
+        outString += "colocando uma peça " + afterColor + "."
+    else:
+        outString += "substituindo uma peça " + beforeColor + " por uma peça " + afterColor + "."
+    print(outString)
+
+def printLastPlay(gameData):
+    if gameData["history"] == []:
+        print(gameData["playerNames"][gameData["turn"]], "joga primeiro.")
+        return
+
+    if len(gameData["history"]) > 1:
+        printPlay(gameData, -2)
+
+    printPlay(gameData, -1)
+    return
+
+inGame = True
 def gameLoop(gameData):
-    while not s.checkWin(gameData):
+    global inGame
+    while (not s.checkWin(gameData)) and inGame:
         clear()
+        printLastPlay(gameData)
         printBoard(gameData)
         while True:
+
             play = input("Jogador " + gameData["playerNames"][gameData["turn"]] + " (linha, coluna): ")
 
-            if len(play) == 2 and play[0] in "123" and play[1] in "1234":
+            if play == "sair":
+                s.saveGame(gameData)
+                inGame = False
+                break
+
+            elif len(play) == 2 and play[0] in "123" and play[1] in "1234":
                 if gameData["board"][int(play[0])-1][int(play[1])-1] == 3:
                     print("jogada inválida, não pode substituir uma peça vermelha")
                 elif not s.checkAvailablePieces(gameData, play):
                     print("jogada inválida, não há peças disponíveis")
                 else:
-                    gameData["board"][int(play[0])-1][int(play[1])-1] += 1
+                    s.play(gameData, play)
                     break
             else:
                 print("jogada inválida")
         gameData["turn"] = (gameData["turn"] + 1) % 2
     gameData["turn"] = (gameData["turn"] + 1) % 2 # para voltar ao jogador que ganhou
-    print("Fim do jogo")
-    printBoard(gameData)
-    print("O jogador", gameData["playerNames"][gameData["turn"]], "ganhou!")
-
+    if inGame:
+        clear()
+        printPlay(gameData, -1)
+        print("Fim do jogo")
+        printBoard(gameData)
+        print(gameData["playerNames"][gameData["turn"]], "ganhou!")
+    else:
+        print("Jogo guardado com sucesso.")
 mainMenu()
