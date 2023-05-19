@@ -67,7 +67,6 @@ pygame_icon = assets["logo"]
 pygame.display.set_icon(pygame_icon)
 n = 1
 
-buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
 cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3*(2147/1920))
 
 pygame.mixer.music.load(assets["welcomeToTheMato"])
@@ -98,6 +97,8 @@ def toggleMusic():
 
 def menuPrincipal(running=True):
     global lang
+    buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+
     bgImage = pygame.transform.scale_by(assets["background"], 3*(2147/1920))
     screen.blit(bgImage, (0, -250))
 
