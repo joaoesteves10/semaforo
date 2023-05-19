@@ -91,6 +91,7 @@ inGame = True
 def gameLoop(gameData):
     global inGame
     while (not s.checkWin(gameData)) and inGame:
+        s.autoSave(gameData)
         clear()
         printLastPlay(gameData)
         printBoard(gameData)
@@ -116,6 +117,7 @@ def gameLoop(gameData):
         gameData["turn"] = (gameData["turn"] + 1) % 2
     gameData["turn"] = (gameData["turn"] + 1) % 2 # para voltar ao jogador que ganhou
     if inGame:
+        s.saveGame(gameData)
         clear()
         printPlay(gameData, -1)
         print("Fim do jogo")
