@@ -1,4 +1,6 @@
 import pygame, logicaSemaforo
+import ctypes
+ctypes.windll.user32.SetProcessDPIAware()
 
 assets = {
     "pt": {
@@ -66,18 +68,18 @@ pygame_icon = assets[lang]["logo"]
 pygame.display.set_icon(pygame_icon)
 n = 1
 
-buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5)
-cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3*(2147/1920))
 
 pygame.mixer.music.load(assets["welcomeToTheMato"])
 pygame.mixer.music.set_volume(0.1)
 pygame.mixer.music.play(0)
 muteButtonAsset = {
-    "muted": (137 * 3, 384 * 3, 9 * 3, 8 * 3),
-    "unmuted": (128 * 3, 384 * 3, 9 * 3, 8 * 3),
+    "muted": (137 * 3*(2147/1920), 384 * 3*(2147/1920), 9 * 3*(2147/1920), 8 * 3*(2147/1920)),
+    "unmuted": (128 * 3*(2147/1920), 384 * 3*(2147/1920), 9 * 3*(2147/1920), 8 * 3*(2147/1920)),
 }
-muteButton = Button((200, 120), # posição
-                    (9 * 3, 8 * 3), # tamanho
+muteButton = Button((20, 20), # posição
+                    (9 * 3*(2147/1920), 8 * 3*(2147/1920)), # tamanho
                     (cursors, muteButtonAsset["unmuted"]), # imagem default
 )
 def toggleMusic():
@@ -88,66 +90,66 @@ def toggleMusic():
     else:
         pygame.mixer.music.unpause()
         muteStatus = "unmuted"
-    screen.fill(0x93bcf8, (200, 120, 9 * 3, 8 * 3))
-    muteButton = Button((200, 120), # posição
-                    (9 * 3, 8 * 3), # tamanho
+    screen.fill(0x93bcf8, (20, 20, 9 * 3*(2147/1920), 8 * 3*(2147/1920)))
+    muteButton = Button((20, 20), # posição
+                    (9 * 3*(2147/1920), 8 * 3*(2147/1920)), # tamanho
                     (cursors, muteButtonAsset[muteStatus]), # imagem default
     )
     muteButton.draw(screen)
 
 def menuPrincipal():
-    bgImage = pygame.transform.scale_by(assets["background"], 2.7)
-    screen.blit(bgImage, (190, -100))
+    bgImage = pygame.transform.scale_by(assets["background"], 3*(2147/1920))
+    screen.blit(bgImage, (0, -250))
 
-    clouds = pygame.transform.scale_by(assets["clouds"], 2)
-    screen.blit(clouds, (200, 200), (0*2, 470*2 , 150*2, 80*2))
-    screen.blit(clouds, (1600, 200), (150*2, 430*2 , 150*2, 80*2))
-    screen.blit(clouds, (1400, 400), (400*2, 465*2 , 140*2, 70*2))
+    clouds = pygame.transform.scale_by(assets["clouds"], 2*(2147/1920))
+    screen.blit(clouds, (100, 200), (0*2*(2147/1920), 470*2*(2147/1920) , 150*2*(2147/1920), 80*2*(2147/1920)))
+    screen.blit(clouds, (1700, 200), (150*2*(2147/1920), 430*2*(2147/1920) , 150*2*(2147/1920), 80*2*(2147/1920)))
+    screen.blit(clouds, (1400, 400), (400*2*(2147/1920), 465*2*(2147/1920) , 140*2*(2147/1920), 70*2*(2147/1920)))
 
-    logo = pygame.transform.scale_by(assets[lang]["logo"], 2)
-    screen.blit(logo, (560, 200))
+    logo = pygame.transform.scale_by(assets[lang]["logo"], 490/200)
+    screen.blit(logo, (468, 100))
 
     muteButton.draw(screen)
 
-    newGameButton = Button((570, 650), # posição
-                        (74 * 2.5, 58 * 2.5), # tamanho
-                        (buttons, (0 * 2.5, 245 * 2.5 - 58 * 2.5, 74 * 2.5, 58 * 2.5)), # imagem default
-                        (buttons, (0 * 2.5, 245 * 2.5, 74 * 2.5, 58 * 2.5)), # imagem hover
+    newGameButton = Button((481, 650), # posição
+                        (74 *2.5*(2147/1920), 58 *2.5*(2147/1920)), # tamanho
+                        (buttons, (0 *2.5*(2147/1920), 245 *2.5*(2147/1920) - 58 *2.5*(2147/1920), 74 *2.5*(2170/1920), 58 *2.5*(2170/1920))), # imagem default
+                        (buttons, (0 *2.5*(2147/1920), 245 *2.5*(2147/1920), 74 *2.5*(2165/1920), 58 *2.5*(2165/1920))), # imagem hover
     )
     newGameButton.draw(screen)
 
-    loadGameButton = Button((770, 650), # posição
-                        (74 * 2.5, 58 * 2.5), # tamanho
-                        (buttons, (74 * 2.5, 245 * 2.5 - 58 * 2.5, 74 * 2.5, 58 * 2.5)), # imagem default
-                        (buttons, (74 * 2.5, 245 * 2.5, 74 * 2.5, 58 * 2.5)), # imagem hover
+    loadGameButton = Button((731, 650), # posição
+                        (74 *2.5*(2147/1920), 58 *2.5*(2147/1920)), # tamanho
+                        (buttons, (74 *2.5*(2147/1920), 245 *2.5*(2147/1920) - 58 *2.5*(2147/1920), 74 *2.5*(2165/1920), 58 *2.5*(2165/1920))), # imagem default
+                        (buttons, (74 *2.5*(2147/1920), 245 *2.5*(2147/1920), 74 *2.5*(2165/1920), 58 *2.5*(2165/1920))), # imagem hover
     )
     loadGameButton.draw(screen)
 
-    rulesButton = Button((970, 650), # posição
-                        (74 * 2.5, 58 * 2.5), # tamanho
-                        (buttons, (148 * 2.5, 245 * 2.5 - 58 * 2.5, 74 * 2.5, 58 * 2.5)), # imagem default
-                        (buttons, (148 * 2.5, 245 * 2.5, 74 * 2.5, 58 * 2.5)), # imagem hover
+    rulesButton = Button((981, 650), # posição
+                        (74 *2.5*(2147/1920), 58 *2.5*(2147/1920)), # tamanho
+                        (buttons, (148 *2.5*(2147/1920), 245 *2.5*(2147/1920) - 58 *2.5*(2147/1920), 74 *2.5*(2165/1920), 58 *2.5*(2165/1920))), # imagem default
+                        (buttons, (148 *2.5*(2147/1920), 245 *2.5*(2147/1920), 74 *2.5*(2165/1920), 58 *2.5*(2165/1920))), # imagem hover
     )
     rulesButton.draw(screen)
 
-    quitButton = Button((1170, 650), # posição
-                        (74 * 2.5, 58 * 2.5), # tamanho
-                        (buttons, (222 * 2.5, 245 * 2.5 - 58 * 2.5, 74 * 2.5, 58 * 2.5)), # imagem default
-                        (buttons, (222 * 2.5, 245 * 2.5, 74 * 2.5, 58 * 2.5)), # imagem hover
+    quitButton = Button((1231, 650), # posição
+                        (74 *2.5*(2147/1920), 58 *2.5*(2147/1920)), # tamanho
+                        (buttons, (222 *2.5*(2147/1920), 245 *2.5*(2147/1920) - 58 *2.5*(2147/1920), 74 *2.5*(2165/1920), 58 *2.5*(2165/1920))), # imagem default
+                        (buttons, (222 *2.5*(2147/1920), 245 *2.5*(2147/1920), 74 *2.5*(2165/1920), 58 *2.5*(2165/1920))), # imagem hover
     )
     quitButton.draw(screen)
 
-    creditsButton = Button((1590, 900), # posição
-                        (22 * 2.5, 25 * 2.5), # tamanho
-                        (buttons, (8 * 2.5, 458 * 2.5, 22 * 2.5, 25 * 2.5)), # imagem default
-                        (buttons, (8 * 2.5 + 22 * 2.5, 458 * 2.5, 22 * 2.5, 25 * 2.5)), # imagem hover
+    creditsButton = Button((1785, 1011), # posição
+                        (22 *2.5*(2147/1920), 25 *2.5*(2147/1920)), # tamanho
+                        (buttons, (8 *2.5*(2147/1920), 458 *2.5*(2147/1920), 22 *2.5*(2147/1920), 25 *2.5*(2147/1920))), # imagem default
+                        (buttons, (8 *2.5*(2147/1920) + 22 *2.5*(2147/1920), 458 *2.5*(2147/1920), 22 *2.5*(2147/1920), 25 *2.5*(2147/1920))), # imagem hover
     )
     creditsButton.draw(screen)
 
-    languageButton = Button((1650, 900), # posição
-                        (27 * 2.5, 25 * 2.5), # tamanho
-                        (buttons, (52 * 2.5, 458 * 2.5, 27 * 2.5, 25 * 2.5)), # imagem default
-                        (buttons, (52 * 2.5 + 27 * 2.5, 458 * 2.5, 27 * 2.5, 25 * 2.5)), # imagem hover
+    languageButton = Button((1845, 1011), # posição
+                        (27 *2.5*(2147/1920), 25 *2.5*(2147/1920)), # tamanho
+                        (buttons, (52 *2.5*(2147/1920), 458 *2.5*(2147/1920), 27 *2.5*(2147/1920), 25 *2.5*(2147/1920))), # imagem default
+                        (buttons, (52 *2.5*(2147/1920) + 27 *2.5*(2147/1920), 458 *2.5*(2147/1920), 27 *2.5*(2147/1920), 25 *2.5*(2147/1920))), # imagem hover
     )
     languageButton.draw(screen)
 
