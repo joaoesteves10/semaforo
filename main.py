@@ -184,6 +184,7 @@ def menuPrincipal(running=True):
 
             if creditsButton.is_clicked(ev):
                 SettingseCredits()
+                menuPrincipal(False)
 
             if languageButton.is_clicked(ev):
                 lang = "en" if lang == "pt" else "pt"
@@ -210,6 +211,8 @@ def SettingseCredits(running = True):
                    )
     buttonback.draw(screen)
 
+    muteButton.draw(screen)
+
     clock = pygame.time.Clock()
 
     while running:
@@ -219,8 +222,11 @@ def SettingseCredits(running = True):
                 pygame.quit()
                 exit()
 
+            if muteButton.is_clicked(ev):
+                toggleMusic()
+
             if buttonback.is_clicked(ev):
-                menuPrincipal()
+                running = False
 
         pygame.display.flip()
         clock.tick(FPS)
