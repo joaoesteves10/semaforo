@@ -62,7 +62,8 @@ class Button(object):
             pygame.mixer.Sound.set_volume(clickSound, 0.2)
             pygame.mixer.Sound.play(clickSound)
             if event.button == 1:
-                screen.blit(self.image_down[0], self.rect, self.image_down[1])
+                # como não estamos a usar isto em nenhum vamos comentar p/ evitar load desnecessário
+                # screen.blit(self.image_down[0], self.rect, self.image_down[1])
                 return self.rect.collidepoint(event.pos)
 
 
@@ -103,8 +104,13 @@ class characterSelectButton(object):
         if event.type == pygame.MOUSEMOTION and not noHover:
             if self.rect.collidepoint(event.pos):
                 screen.fill(0xfab05a, (1308, 132, 58 * 3.2 + 7, 58 * 3.2 + 7))
-                screen.blit(self.image_hover, self.rect, self.iconCoords)
+                # como aqui não faz diferença (image_hover é sempre igual à imagem) e não estamos a usar
+                # nada hovered vamos comentar p/ evitar load desnecessário
+                # screen.blit(self.image_hover, self.rect, self.iconCoords)
                 screen.blit(self.imgScaled3, self.avatarPos, self.avatarCoords)
+            # mesma coisa, não estamos a usar nada hovered, não faz diferença
+            # else:
+            #    screen.blit(self.imgScaled13, self.rect, self.iconCoords)
 
     def is_clicked(self, event, noHover=False):
         self.is_hovered(event, noHover)
@@ -113,7 +119,7 @@ class characterSelectButton(object):
             pygame.mixer.Sound.set_volume(clickSound, 0.2)
             pygame.mixer.Sound.play(clickSound)
             if event.button == 1:
-                screen.blit(self.image_down, self.rect, self.iconCoords)
+                # screen.blit(self.image_down, self.rect, self.iconCoords)
                 return self.rect.collidepoint(event.pos)
 
 
@@ -332,7 +338,6 @@ def NomePersonagem(running = True):
         a.draw(screen)
 
     screen.fill(0xfab05a, (1308, 132, 58 * 3.2 + 7, 58 * 3.2 + 7))
-
 
     clock = pygame.time.Clock()
 
