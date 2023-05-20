@@ -46,7 +46,7 @@ def checkWin(gameData):
         return True
 
     for row in gameData["board"]:
-        if row[0] == row[1] == row[2] != 0:
+        if row[0] == row[1] == row[2] != 0 or row[1] == row[2] == row[3] != 0:
             gameData["ended"] = True
             return True
 
@@ -89,10 +89,7 @@ def saveGame(gameData):
     if os.path.exists("save.json"):
         with open("save.json", "r") as saveFile:
             games = json.load(saveFile)
-
-    print(games)
     games.append(gameData)
-    print(games)
     with open("save.json", "w") as saveFile:
         json.dump(games, saveFile)
 
