@@ -1,5 +1,6 @@
 import pygame, logicaSemaforo
 import ctypes
+import os
 ctypes.windll.user32.SetProcessDPIAware()
 pygame.font.init()
 font = pygame.font.Font("./assets/fonts/Stardew_Valley.ttf", 50)
@@ -19,8 +20,13 @@ assets = {
     "background": pygame.image.load("./assets/global/stardewPanorama.png"),
     "specialOrdersBoard": pygame.image.load("./assets/global/SpecialOrdersBoard.png"),
     "welcomeToTheMato": "./assets/music/welcomeToTheMato.mp3",
-    "click": "./assets/sounds/click.mp3"
+    "click": "./assets/sounds/click.mp3",
+    "abigail": pygame.image.load("./assets/global/Portraits/Abigail.png"),
+    "alex": pygame.image.load("./assets/global/Portraits/Alex.png"),
 }
+
+
+
 
 class Button(object):
     def __init__(self, position, size, image, image_hover=None, image_down=None):
@@ -58,6 +64,58 @@ class Button(object):
             if event.button == 1:
                 screen.blit(self.image_down[0], self.rect, self.image_down[1])
                 return self.rect.collidepoint(event.pos)
+
+
+class characterSelectButton(object):
+
+    def __init__(self, position, image, name, size=(64 * 1.3 , 64 * 1.3), image_hover=None, image_down=None, avatarPos=(1305, 132), avatarCoords=(0 , 0, 64 * 3, 64 * 3), iconCoords=(0, 0, 64 * 1.3, 64 * 1.3)):
+        self.image = image
+
+        if image_hover is None:
+            self.image_hover = image
+        else:
+            self.image_hover = image_hover
+
+        if image_down is None:
+            self.image_down = image
+        else:
+            self.image_down = image_down
+
+        self.rect = pygame.Rect(position, size)
+        self.iconCoords = iconCoords
+        self.avatarCoords = avatarCoords
+        self.avatarPos = avatarPos
+        self.imgScaled13 = pygame.transform.scale_by(image, 1.3)
+        self.imgScaled3 = pygame.transform.scale_by(image, 3)
+        self.image_hover = pygame.transform.scale_by(self.image_hover, 1.3)
+        self.image_down = pygame.transform.scale_by(self.image_down, 1.3)
+        self.name = name
+
+    def draw(self, screen):
+        screen.blit(self.imgScaled13, self.rect, self.iconCoords)
+
+    def drawAvi(self, screen):
+        screen.fill(0xfab05a, (1308, 132, 58 * 3.2 + 7, 58 * 3.2 + 7))
+        screen.blit(self.image_hover, self.rect, self.iconCoords)
+        screen.blit(self.imgScaled3, self.avatarPos, self.avatarCoords)
+
+    def is_hovered(self, event, noHover=False):
+        if event.type == pygame.MOUSEMOTION and not noHover:
+            if self.rect.collidepoint(event.pos):
+                screen.fill(0xfab05a, (1308, 132, 58 * 3.2 + 7, 58 * 3.2 + 7))
+                screen.blit(self.image_hover, self.rect, self.iconCoords)
+                screen.blit(self.imgScaled3, self.avatarPos, self.avatarCoords)
+
+    def is_clicked(self, event, noHover=False):
+        self.is_hovered(event, noHover)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            clickSound = pygame.mixer.Sound(assets["click"])
+            pygame.mixer.Sound.set_volume(clickSound, 0.2)
+            pygame.mixer.Sound.play(clickSound)
+            if event.button == 1:
+                screen.blit(self.image_down, self.rect, self.iconCoords)
+                return self.rect.collidepoint(event.pos)
+
 
 pygame.init()
 
@@ -232,6 +290,15 @@ def SettingseCredits(running = True):
         pygame.display.flip()
         clock.tick(FPS)
 
+def importCharacters():
+    characters = []
+    chars = os.listdir("./assets/global/Portraits/")
+    for c in chars:
+        if c.split(".")[1] == "png":
+            characters.append((c.split(".")[0], pygame.image.load("./assets/global/Portraits/" + c)))
+    return characters
+
+
 def NomePersonagem(running = True):
     global lang
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
@@ -246,13 +313,30 @@ def NomePersonagem(running = True):
                    )
     buttonback.draw(screen)
 
+    characters = importCharacters()
+    avis = []
 
 
+    yy = 217
+    cc = 0
+    while yy < 217+108*6 and cc < len(characters):
+        xx = 191
+        while xx < 191+108*6 and cc < len(characters):
+            avis.append(characterSelectButton((xx, yy), characters[cc][1], characters[cc][0]))
+            cc += 1
+            xx += 110
+        yy += 111.5
+
+
+    for a in avis:
+        a.draw(screen)
+
+    screen.fill(0xfab05a, (1308, 132, 58 * 3.2 + 7, 58 * 3.2 + 7))
 
 
     clock = pygame.time.Clock()
 
-
+    clicked = None
     while running:
         for ev in pygame.event.get():
 
@@ -262,6 +346,18 @@ def NomePersonagem(running = True):
 
             if buttonback.is_clicked(ev):
                 running = False
+
+            if clicked == None:
+                for a in avis:
+                    if a.is_clicked(ev, noHover=False):
+                        clicked = a.name
+            else:
+                for a in avis:
+                    if a.name == clicked:
+                        a.drawAvi(screen)
+                    if a.is_clicked(ev, noHover=True):
+                        clicked = a.name
+                        a.drawAvi(screen)
 
         pygame.display.flip()
         clock.tick(FPS)
