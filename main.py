@@ -21,8 +21,7 @@ assets = {
     "specialOrdersBoard": pygame.image.load("./assets/global/SpecialOrdersBoard.png"),
     "welcomeToTheMato": "./assets/music/welcomeToTheMato.mp3",
     "click": "./assets/sounds/click.mp3",
-    "abigail": pygame.image.load("./assets/global/Portraits/Abigail.png"),
-    "alex": pygame.image.load("./assets/global/Portraits/Alex.png"),
+    "crops": pygame.image.load("./assets/global/crops.png"),
 }
 
 
@@ -242,7 +241,8 @@ def menuPrincipal(running=True):
                 menuPrincipal(False)
 
             if loadGameButton.is_clicked(ev):
-                continue
+                Tabuleiro()
+                menuPrincipal(False)
 
             if rulesButton.is_clicked(ev):
                 continue
@@ -367,7 +367,56 @@ def NomePersonagem(running = True):
         pygame.display.flip()
         clock.tick(FPS)
 
+def Tabuleiro(running = True):
+    global lang
 
+    tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
+    screen.blit(tabuleiro, (0, 0), (0 , 0, 320*6, 180*6))
+
+    quadradro1 = Button((300, 300),  # posição
+                   (40 * 6, 40 * 6),  # tamanho
+                   (tabuleiro, (534 * 6, 18 * 6, 40 * 6, 40 * 6)),  # imagem default
+                   )
+    quadradro1.draw(screen)
+
+    quadradro2 = Button((600, 300),  # posição
+                        (40 * 6, 40 * 6),  # tamanho
+                        (tabuleiro, (534 * 6, 18 * 6, 40 * 6, 40 * 6)),  # imagem default
+                        )
+    quadradro2.draw(screen)
+
+    quadradro3 = Button((900, 300),  # posição
+                        (40 * 6, 40 * 6),  # tamanho
+                        (tabuleiro, (534 * 6, 18 * 6, 40 * 6, 40 * 6)),  # imagem default
+                        )
+    quadradro3.draw(screen)
+
+
+
+
+    clock = pygame.time.Clock()
+
+    while running:
+        for ev in pygame.event.get():
+
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if quadradro1.is_clicked(ev):
+                crops = pygame.transform.scale_by(assets["crops"], 3.6)
+                screen.blit(crops, (334, 326), (208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6))
+
+            if quadradro2.is_clicked(ev):
+                crops = pygame.transform.scale_by(assets["crops"], 3.7)
+                screen.blit(crops, (631, 327), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7))
+
+            if quadradro3.is_clicked(ev):
+                crops = pygame.transform.scale_by(assets["crops"], 3.6)
+                screen.blit(crops, (936, 326), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6))
+
+        pygame.display.flip()
+        clock.tick(FPS)
 
 while True:
     menuPrincipal()
