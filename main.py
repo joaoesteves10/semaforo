@@ -13,6 +13,7 @@ assets = {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
         "cursors": pygame.image.load("./assets/en/Cursors.png"),
     },
+    "tabuleiro": pygame.image.load("./assets/global/tabuleiro.png"),
     "logo": pygame.image.load("./assets/global/novalogo2.png"),
     "clouds": pygame.image.load("./assets/global/Clouds.png"),
     "background": pygame.image.load("./assets/global/stardewPanorama.png"),
@@ -173,7 +174,7 @@ def menuPrincipal(running=True):
                 exit()
 
             if newGameButton.is_clicked(ev):
-                continue
+                NomePersonagem()
 
             if loadGameButton.is_clicked(ev):
                 continue
@@ -223,6 +224,42 @@ def SettingseCredits(running = True):
 
         pygame.display.flip()
         clock.tick(FPS)
+
+def NomePersonagem(running = True):
+    global lang
+    tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
+    screen.blit(tabuleiro, (0, 0), (320 * 6, 0, 320*6, 180*6))
+
+    buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+
+    buttonback = Button((1755, 1005),  # posição
+                   (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920), 66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),  # imagem default
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920)+27 * 2.5*(2147/1920),66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),
+                   )
+    buttonback.draw(screen)
+
+
+
+
+
+    clock = pygame.time.Clock()
+
+
+    while running:
+        for ev in pygame.event.get():
+
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if buttonback.is_clicked(ev):
+                menuPrincipal()
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
 
 while True:
     menuPrincipal()
