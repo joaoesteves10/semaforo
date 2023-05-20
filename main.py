@@ -175,6 +175,7 @@ def menuPrincipal(running=True):
 
             if newGameButton.is_clicked(ev):
                 NomePersonagem()
+                menuPrincipal(False)
 
             if loadGameButton.is_clicked(ev):
                 continue
@@ -260,7 +261,7 @@ def NomePersonagem(running = True):
                 exit()
 
             if buttonback.is_clicked(ev):
-                menuPrincipal()
+                running = False
 
         pygame.display.flip()
         clock.tick(FPS)
