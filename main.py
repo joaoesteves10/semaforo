@@ -1,6 +1,8 @@
 import pygame, logicaSemaforo
 import ctypes
 ctypes.windll.user32.SetProcessDPIAware()
+pygame.font.init()
+font = pygame.font.Font("./assets/fonts/Stardew_Valley.ttf", 50)
 
 assets = {
     "pt": {
@@ -180,7 +182,7 @@ def menuPrincipal(running=True):
                 continue
 
             if creditsButton.is_clicked(ev):
-                continue
+                SettingseCredits()
 
             if languageButton.is_clicked(ev):
                 lang = "en" if lang == "pt" else "pt"
@@ -189,5 +191,39 @@ def menuPrincipal(running=True):
         pygame.display.flip()
         clock.tick(FPS)
 
+
+def SettingseCredits(running = True):
+    global lang
+    soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 4.5)
+    screen.blit(soBoard, (202, 100), (0, 0, 337*4.5, 197*4.5))
+
+    texto = font.render("Test", False, (86,22,12))
+    screen.blit(texto, (300,300))
+
+    buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+
+    buttonback = Button((1755, 1005),  # posição
+                   (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920), 66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),  # imagem default
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920)+27 * 2.5*(2147/1920),66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),
+                   )
+    buttonback.draw(screen)
+
+    clock = pygame.time.Clock()
+
+    while running:
+        for ev in pygame.event.get():
+
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if buttonback.is_clicked(ev):
+                menuPrincipal()
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
 while True:
     menuPrincipal()
+
