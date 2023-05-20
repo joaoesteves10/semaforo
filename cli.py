@@ -120,10 +120,10 @@ def carregarJogo():
             while (watchReplay.lower() not in ["s", "n"]):
                 watchReplay = input("Este jogo já terminou, ver replay? [s/n]: ")
 
-                if continuar.lower() == "s":
-                    gameLoop(autosaved)
+                if watchReplay.lower() == "s":
+                    replayGame(games[escolha])
                     return
-                elif continuar.lower() == "n":
+                elif watchReplay.lower() == "n":
                     continue
                 else:
                     print("Escolha inválida!")
