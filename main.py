@@ -69,7 +69,7 @@ class Button(object):
 
 class characterSelectButton(object):
 
-    def __init__(self, position, image, name, size=(64 * 1.3 , 64 * 1.3), image_hover=None, image_down=None, avatarPos=(1305, 132), avatarCoords=(0 , 0, 64 * 3, 64 * 3), iconCoords=(0, 0, 64 * 1.3, 64 * 1.3)):
+    def __init__(self, position, image, name, size=(64 * 1.3 , 64 * 1.3), image_hover=None, image_down=None, avatarPos=(1308, 132), avatarCoords=(0 , 0, 64 * 3, 64 * 3), iconCoords=(0, 0, 64 * 1.3, 64 * 1.3)):
         self.image = image
 
         if image_hover is None:
