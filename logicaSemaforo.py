@@ -84,6 +84,30 @@ def play(gameData, play):
 
     return gameData
 
+def reverseLastPlay(gameData):
+    if len(gameData["history"]) == 0:
+        return gameData
+
+    lastPlay = gameData["history"].pop()
+    if lastPlay[1] == "pass":
+        passarVez(gameData)
+        return gameData
+
+    gameData["board"][int(lastPlay[1][0])-1][int(lastPlay[1][1])-1] = lastPlay[2][0]
+    passarVez(gameData)
+    return gameData
+
+def initReplayEngine(gameData):
+    return {
+        "startTime": gameData["startTime"], # timestamp do início do jogo, usado para display nos saves
+        "ended": False, # se o jogo já acabou, usado para display nos saves
+        "playerNames": [gameData["playerNames"][0], gameData["playerNames"][1]],
+        "playerAvatars": [gameData["playerAvatars"][0], gameData["playerAvatars"][0]], # será usado pela GUI, desnecessário para a lógica e CLI
+        "turn": gameData["history"][0][0],
+        "board": [[0,0,0,0],[0,0,0,0],[0,0,0,0]], # matriz, 0 = vazio, 1 = verde, 2 = amarelo, 3 = vermelho
+        "history": [] # lista de tuplas (jogador, jogada, (peça antes, peça depois), timestamp)
+    }
+
 def saveGame(gameData):
     games = []
     if os.path.exists("save.json"):

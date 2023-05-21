@@ -154,14 +154,20 @@ def printPlay(gameData, play):
         outString += "substituindo uma peça " + beforeColor + " por uma peça " + afterColor + "."
     print(outString)
 
-def printLastPlay(gameData):
+def printLastPlay(gameData, timeStamp = False):
     if gameData["history"] == []:
+        if timeStamp:
+            print(datetime.utcfromtimestamp(gameData["startTime"]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
         print(gameData["playerNames"][gameData["turn"]], "joga primeiro.")
         return
 
     if len(gameData["history"]) > 1:
+        if timeStamp:
+            print(datetime.utcfromtimestamp(gameData["history"][-2][3]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
         printPlay(gameData, -2)
 
+    if timeStamp:
+        print(datetime.utcfromtimestamp(gameData["history"][-1][3]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
     printPlay(gameData, -1)
     return
 
@@ -208,7 +214,7 @@ def gameLoop(gameData):
     else:
         print("Jogo guardado com sucesso.")
 
-def replayGame(gameData): # melhorar
+def replayGame(gameData):
     clear()
     print("Replay do jogo iniciado em", datetime.utcfromtimestamp(gameData["startTime"]).strftime('%Y-%m-%d %H:%M:%S'))
     print("Jogadores:", gameData["playerNames"][0], "contra", gameData["playerNames"][1])
@@ -218,5 +224,78 @@ def replayGame(gameData): # melhorar
     for play in gameData["history"]:
         print(datetime.utcfromtimestamp(play[3]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
         printPlay(gameData, gameData["history"].index(play))
+    escolha = ""
+    while escolha.lower() not in ["s", "n"]:
+        escolha = input("Deseja rever este jogo play-by-play? [s/n]: ")
+        if escolha.lower() == "s":
+            playCount = -1
+            replay = s.initReplayEngine(gameData)
+            while (playCount < len(gameData["history"]) and not s.checkWin(replay)):
+                clear()
+                printLastPlay(replay)
+                printBoard(replay)
+                print("--------------------")
+                print("ESCOLHA 0 PARA PLAY ANTERIOR, ENTER PARA PLAY SEGUINTE, -1 PARA SAIR")
+                avancar = " "
+                while avancar not in ["-1", "0", ""]:
+                    avancar = input()
+                    if avancar == "":
+                        playCount += 1
+                        s.play(replay, gameData["history"][playCount][1])
+                        s.passarVez(replay)
+                        continue
+                    elif avancar == "-1":
+                        return
+                    elif avancar == "0" and playCount > -1:
+                        playCount -= 1
+                        replay = s.reverseLastPlay(replay)
+                    else:
+                        print("Escolha inválida!")
+
+
+            replay["turn"] = (replay["turn"] + 1) % 2 # para voltar ao jogador que ganhou
+            clear()
+            printPlay(replay, -1)
+            print("Fim do jogo")
+            printBoard(replay)
+            print(replay["playerNames"][replay["turn"]], "ganhou!")
+
+
+
+            """
+            simGameData = s.initGameData(gameData["playerNames"][0], gameData["playerNames"][1])
+            simBoard = simGameData["board"]
+            for play in gameData["history"]:
+                clear()
+                if play[1] == "pass":
+                    s.passarVez(simGameData)
+                    simGameData["history"].append(play)
+                    printLastPlay(simGameData)
+                    printBoard(simGameData)
+                else:
+                    s.play(simGameData, play[1])
+                    printLastPlay(simGameData, timeStamp = True)
+                    printBoard(simGameData)
+                print("--------------------")
+                print("ESCOLHA 0 PARA PLAY ANTERIOR, ENTER PARA PLAY SEGUINTE, -1 PARA SAIR")
+                avancar = " "
+                while avancar not in ["-1", "0", ""]:
+                    avancar = input()
+                    if avancar == "":
+                        break
+                    elif avancar == "-1":
+                        return
+                    elif avancar == "0":
+                        simGameData = s.reverseLastPlay(simGameData)
+                        continue
+                    else:
+                        print("Escolha inválida!")
+            """
+        elif escolha.lower() == "n":
+            break
+        else:
+            print("Escolha inválida!")
+
+            ## falta checkwin, iniciar mostrando quem começa c/ board vazia, resolver random em quem começ
 
 mainMenu()
