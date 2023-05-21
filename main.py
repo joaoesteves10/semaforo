@@ -264,8 +264,15 @@ def SettingseCredits(running = True):
     soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 4.5)
     screen.blit(soBoard, (202, 100), (0, 0, 337*4.5, 197*4.5))
 
-    texto = font.render("Test", False, (86,22,12))
-    screen.blit(texto, (300,300))
+    texto = font.render("Trabalho realizado por:", False, (86,22,12))
+    texto2 = font.render("Al78505 Beatriz Pinheiro", False, (86,22,12))
+    texto3 = font.render("Al78734 Diogo Pinto", False, (86,22,12))
+    texto4 = font.render("Al78411 Joao Esteves", False, (86,22,12))
+
+    screen.blit(texto, (300,250))
+    screen.blit(texto2, (300,290))
+    screen.blit(texto3, (300,330))
+    screen.blit(texto4, (300,370))
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
 
@@ -312,12 +319,21 @@ def NomePersonagem(running = True):
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
 
+
+    input_box = pygame.Rect(1150, 725, 200, 200)
+    color_inactive = pygame.Color((86,22,12))
+    color_active = pygame.Color((86,22,12))
+    color = color_inactive
+    active = False
+    text = ''
+
     buttonback = Button((1755, 1005),  # posição
                    (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
                    (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920), 66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),  # imagem default
                    (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920)+27 * 2.5*(2147/1920),66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),
                    )
     buttonback.draw(screen)
+
 
     characters = importCharacters()
     avis = []
@@ -364,6 +380,24 @@ def NomePersonagem(running = True):
                         clicked = a.name
                         a.drawAvi(screen)
 
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(ev.pos):
+                    active = not active
+                else:
+                    active = False
+                color = color_active if active else color_inactive
+            if ev.type == pygame.KEYDOWN:
+                if active:
+                    if ev.key == pygame.K_RETURN:
+                        print(text)
+                        text = ''
+                    elif ev.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        text += ev.unicode
+
+        txt_surface = font.render(text, False, color)
+        screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
         pygame.display.flip()
         clock.tick(FPS)
 
