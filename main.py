@@ -3,7 +3,7 @@ import ctypes
 import os
 ctypes.windll.user32.SetProcessDPIAware()
 pygame.font.init()
-font = pygame.font.Font("./assets/fonts/Stardew_Valley.ttf", 50)
+font = pygame.font.Font("./assets/fonts/Stardew_Valley.ttf", 30)
 
 assets = {
     "pt": {
@@ -23,9 +23,6 @@ assets = {
     "click": "./assets/sounds/click.mp3",
     "crops": pygame.image.load("./assets/global/crops.png"),
 }
-
-
-
 
 class Button(object):
     def __init__(self, position, size, image, image_hover=None, image_down=None):
@@ -64,7 +61,6 @@ class Button(object):
                 # como não estamos a usar isto em nenhum vamos comentar p/ evitar load desnecessário
                 # screen.blit(self.image_down[0], self.rect, self.image_down[1])
                 return self.rect.collidepoint(event.pos)
-
 
 class characterSelectButton(object):
 
@@ -258,22 +254,26 @@ def menuPrincipal(running=True):
         pygame.display.flip()
         clock.tick(FPS)
 
-
 def SettingseCredits(running = True):
     global lang
     soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 4.5)
     screen.blit(soBoard, (202, 100), (0, 0, 337*4.5, 197*4.5))
 
-    ### INTERNACIONALIZAR
-    texto = font.render("Trabalho realizado por:", False, (86,22,12))
-    texto2 = font.render("Al78505 Beatriz Pinheiro", False, (86,22,12))
-    texto3 = font.render("Al78734 Diogo Pinto", False, (86,22,12))
-    texto4 = font.render("Al78411 Joao Esteves", False, (86,22,12))
+    renderTextCenteredAt("""Este jogo foi criado como projeto final para a unidade curricular Laboratorio de Programacao (primeiro ano, segundo semestre, 2022/23) do curso de Licenciatura em Engenharia Informatica da Universidade de Tras-os-Montes e Alto Douro por: \n
 
-    screen.blit(texto, (300,250))
-    screen.blit(texto2, (300,290))
-    screen.blit(texto3, (300,330))
-    screen.blit(texto4, (300,370))
+(AL78505) Beatriz Pinheiro \n
+(AL78734) Diogo Pinto \n
+(AL78411) Joao Esteves \n
+
+Assets visuais e sonoros foram retirados do jogo Stardew Valley (ConcernedApe) e adaptados conforme necessario, sob fair use para propositos educacionais. \n
+
+Soundtrack: \n
+Welcome To The Mato ft. Dj Kevin (Clipe Oficial) (link) \n
+... \n
+
+https://github.com/joaoesteves10/semaforo/ \n
+Este software nao deve ser usado ou distribuido para fins comerciais.""", font,(86,22,12),590,250,screen,600)
+
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
 
@@ -426,9 +426,6 @@ def Tabuleiro(running = True):
                         )
     quadradro3.draw(screen)
 
-
-
-
     clock = pygame.time.Clock()
 
     while running:
@@ -453,6 +450,42 @@ def Tabuleiro(running = True):
         pygame.display.flip()
         clock.tick(FPS)
 
+def renderTextCenteredAt(text, font, colour, x, y, screen, allowed_width):
+    # first, split the text into words
+    words = text.split()
+
+    # now, construct lines out of these words
+    lines = []
+    while len(words) > 0:
+        # get as many words as will fit within allowed_width
+        line_words = []
+        while len(words) > 0:
+            line_words.append(words.pop(0))
+            fw, fh = font.size(' '.join(line_words + words[:1]))
+            if fw > allowed_width:
+                break
+
+        # add a line consisting of those words
+        line = ' '.join(line_words)
+        lines.append(line)
+
+    # now we've split our text into lines that fit into the width, actually
+    # render them
+
+    # we'll render each line below the last, so we need to keep track of
+    # the culmative height of the lines we've rendered so far
+    y_offset = 0
+    for line in lines:
+        fw, fh = font.size(line)
+
+        # (tx, ty) is the top-left of the font surface
+        tx = x - fw / 2
+        ty = y + y_offset
+
+        font_surface = font.render(line, True, colour)
+        screen.blit(font_surface, (tx, ty))
+
+        y_offset += fh
+
 while True:
     menuPrincipal()
-
