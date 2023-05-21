@@ -264,6 +264,7 @@ def SettingseCredits(running = True):
     soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 4.5)
     screen.blit(soBoard, (202, 100), (0, 0, 337*4.5, 197*4.5))
 
+    ### INTERNACIONALIZAR
     texto = font.render("Trabalho realizado por:", False, (86,22,12))
     texto2 = font.render("Al78505 Beatriz Pinheiro", False, (86,22,12))
     texto3 = font.render("Al78734 Diogo Pinto", False, (86,22,12))
