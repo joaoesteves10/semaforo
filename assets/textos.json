@@ -1,0 +1,8 @@
+{
+    "en": {
+        "creditos": "<texto dos creditos trduzido aqui>"
+    },
+    "pt": {
+        "creditos": "Este jogo foi criado como projeto final para a unidade curricular Laboratorio de Programacao (primeiro ano, segundo semestre, 2022/23) do curso de Licenciatura em Engenharia Informatica da Universidade de Tras-os-Montes e Alto Douro por:\n\n(AL78505) Beatriz Pinheiro\n(AL78734) Diogo Pinto\n(AL78411) Joao Esteves\n\nAssets visuais e sonoros foram retirados do jogo Stardew Valley (ConcernedApe) e adaptados conforme necessario, sob fair use para propositos educacionais.\n\nSoundtrack:\nWelcome To The Mato ft. Dj Kevin (Clipe Oficial)\n...\n\nhttps://github.com/joaoesteves10/semaforo/\nEste software nao deve ser usado ou distribuido para fins comerciais."
+    }
+}

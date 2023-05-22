@@ -1,6 +1,7 @@
 import pygame, logicaSemaforo
 import ctypes
 import os
+import json
 ctypes.windll.user32.SetProcessDPIAware()
 pygame.font.init()
 font = pygame.font.Font("./assets/fonts/Stardew_Valley.ttf", 30)
@@ -22,7 +23,11 @@ assets = {
     "welcomeToTheMato": "./assets/music/welcomeToTheMato.mp3",
     "click": "./assets/sounds/click.mp3",
     "crops": pygame.image.load("./assets/global/crops.png"),
+
 }
+
+with open("./assets/textos.json", encoding="UTF-8") as f:
+    textos = json.load(f)
 
 class Button(object):
     def __init__(self, position, size, image, image_hover=None, image_down=None):
@@ -258,20 +263,7 @@ def SettingseCredits(running = True):
     soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 4.5)
     screen.blit(soBoard, (202, 100), (0, 0, 337*4.5, 197*4.5))
 
-    renderTextCenteredAt("""Este jogo foi criado como projeto final para a unidade curricular Laboratorio de Programacao (primeiro ano, segundo semestre, 2022/23) do curso de Licenciatura em Engenharia Informatica da Universidade de Tras-os-Montes e Alto Douro por: \n
-
-(AL78505) Beatriz Pinheiro \n
-(AL78734) Diogo Pinto \n
-(AL78411) Joao Esteves \n
-
-Assets visuais e sonoros foram retirados do jogo Stardew Valley (ConcernedApe) e adaptados conforme necessario, sob fair use para propositos educacionais. \n
-
-Soundtrack: \n
-Welcome To The Mato ft. Dj Kevin (Clipe Oficial) (link) \n
-... \n
-
-https://github.com/joaoesteves10/semaforo/ \n
-Este software nao deve ser usado ou distribuido para fins comerciais.""", font,(86,22,12),590,250,screen,600)
+    renderTextCenteredAt(textos[lang]["creditos"], font,(86,22,12),590,250,screen,600)
 
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
@@ -578,7 +570,15 @@ def Tabuleiro(running = True):
 
 def renderTextCenteredAt(text, font, colour, x, y, screen, allowed_width):
     # first, split the text into words
-    words = text.split()
+    words = []
+    textS = text.split("\n")
+    for line in textS:
+        if line != "":
+            for l in line.split():
+                words.append(l)
+        else:
+            words.append("\n")
+        words.append("\n")
 
     # now, construct lines out of these words
     lines = []
@@ -586,6 +586,9 @@ def renderTextCenteredAt(text, font, colour, x, y, screen, allowed_width):
         # get as many words as will fit within allowed_width
         line_words = []
         while len(words) > 0:
+            if words[0] == "\n":
+                words.pop(0)
+                break
             line_words.append(words.pop(0))
             fw, fh = font.size(' '.join(line_words + words[:1]))
             if fw > allowed_width:
@@ -594,6 +597,18 @@ def renderTextCenteredAt(text, font, colour, x, y, screen, allowed_width):
         # add a line consisting of those words
         line = ' '.join(line_words)
         lines.append(line)
+
+    while True:
+        found = False
+        xi = 1
+        while xi < len(lines):
+            if lines[xi] == "" and lines[xi] == lines [xi-1]:
+                lines.pop(xi)
+                found = True
+            xi += 1
+
+        if not found:
+            break
 
     # now we've split our text into lines that fit into the width, actually
     # render them
@@ -605,7 +620,8 @@ def renderTextCenteredAt(text, font, colour, x, y, screen, allowed_width):
         fw, fh = font.size(line)
 
         # (tx, ty) is the top-left of the font surface
-        tx = x - fw / 2
+        # tx = x - fw / 2
+        tx = x-x/2
         ty = y + y_offset
 
         font_surface = font.render(line, True, colour)
