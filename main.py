@@ -137,7 +137,7 @@ n = 1
 cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3*(2147/1920))
 
 pygame.mixer.music.load(assets["welcomeToTheMato"])
-pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.set_volume(0.3)
 pygame.mixer.music.play(0)
 muteButtonAsset = {
     "muted": (137 * 3*(2147/1920), 384 * 3*(2147/1920), 9 * 3*(2147/1920), 8 * 3*(2147/1920)),
@@ -263,7 +263,7 @@ def SettingseCredits(running = True):
     soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 4.5)
     screen.blit(soBoard, (202, 100), (0, 0, 337*4.5, 197*4.5))
 
-    renderTextCenteredAt(textos[lang]["creditos"], font,(86,22,12),590,250,screen,600)
+    renderTextCenteredAt(textos[lang]["creditos"], font,(86,22,12),2040,240,screen,600)
 
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
