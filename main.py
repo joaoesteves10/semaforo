@@ -379,6 +379,7 @@ def NomePersonagem(running = True):
 
             if ok.is_clicked(ev):
                 NomePersonagem2()
+                NomePersonagem(False)
 
             if clicked == None:
                 for a in avis:
@@ -480,6 +481,7 @@ def NomePersonagem2(running = True):
 
             if ok.is_clicked(ev):
                 Tabuleiro()
+                NomePersonagem2(False)
 
             if clicked == None:
                 for a in avis:
