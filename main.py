@@ -4,7 +4,6 @@ import os
 import json
 ctypes.windll.user32.SetProcessDPIAware()
 pygame.font.init()
-font = pygame.font.Font("./assets/fonts/Stardew_Valley.ttf", 30)
 
 assets = {
     "pt": {
@@ -23,8 +22,11 @@ assets = {
     "welcomeToTheMato": "./assets/music/welcomeToTheMato.mp3",
     "click": "./assets/sounds/click.mp3",
     "crops": pygame.image.load("./assets/global/crops.png"),
-
+    "font": "./assets/fonts/Stardew_Valley.ttf"
 }
+
+font = pygame.font.Font(assets["font"], 30)
+
 
 with open("./assets/textos.json", encoding="UTF-8") as f:
     textos = json.load(f)
