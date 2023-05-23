@@ -85,14 +85,14 @@ class boardButton(object):
         self.position = position
         self.tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
         self.crops = pygame.transform.scale_by(assets["crops"], 3.6)
-        self.cropsP = [None, (208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
+        self.cropsP = [None, (208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.6, 525 * 3.6, 48 * 3.6, 53 * 3.6), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
         self.rect = pygame.Rect(position, size)
         self.piece = piece
 
     def draw(self, screen):
         screen.blit(self.tabuleiro, self.rect, (534 * 6, 18 * 6, 40 * 6, 40 * 6),)
         if self.piece != 0:
-            screen.blit(self.crops, (self.position[0], self.position[1], 40*6, 40*6), self.cropsP[self.piece])
+            screen.blit(self.crops, (self.position[0]+32, self.position[1]+26, 40*6, 40*6), self.cropsP[self.piece])
 
     def is_hovered(self, event, noHover=False):
         if event.type == pygame.MOUSEMOTION and not noHover:
