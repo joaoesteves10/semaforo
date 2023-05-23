@@ -1,4 +1,5 @@
-import pygame, logicaSemaforo
+import pygame
+import logicaSemaforo as s
 import ctypes
 import os
 import json
@@ -51,15 +52,59 @@ class Button(object):
     def draw(self, screen):
         screen.blit(self.image[0], self.rect, self.image[1])
 
-    def is_hovered(self, event):
-        if event.type == pygame.MOUSEMOTION:
+    def is_hovered(self, event, noHover=False):
+        if event.type == pygame.MOUSEMOTION and not noHover:
             if self.rect.collidepoint(event.pos):
                 screen.blit(self.image_hover[0], self.rect, self.image_hover[1])
             else:
                 screen.blit(self.image[0], self.rect, self.image[1])
 
-    def is_clicked(self, event):
-        self.is_hovered(event)
+    def is_clicked(self, event, noHover=False):
+        self.is_hovered(event, noHover)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            clickSound = pygame.mixer.Sound(assets["click"])
+            pygame.mixer.Sound.set_volume(clickSound, 0.2)
+            pygame.mixer.Sound.play(clickSound)
+            if event.button == 1:
+                # como não estamos a usar isto em nenhum vamos comentar p/ evitar load desnecessário
+                # screen.blit(self.image_down[0], self.rect, self.image_down[1])
+                return self.rect.collidepoint(event.pos)
+
+class boardButton(object):
+    def __init__(self, position, piece):
+
+        """
+            buttonBoard[l][c] = Button((xx, yy),  # posição
+                   (40 * 6, 40 * 6),  # tamanho
+                   (tabuleiro, (534 * 6, 18 * 6, 40 * 6, 40 * 6)),  # imagem default
+                   )
+        self.image = image
+        """
+
+        size = (40 * 6, 40 * 6)
+        self.position = position
+        self.tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
+        self.buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+        self.cropsP = [None, (208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
+        self.rect = pygame.Rect(position, size)
+        self.piece = piece
+
+    def draw(self, screen):
+        screen.blit(self.tabuleiro, self.rect, (534 * 6, 18 * 6, 40 * 6, 40 * 6),)
+        if self.piece != 0:
+            screen.blit(self.tabuleiro, self.rect, self.cropsP[self.piece])
+
+    def is_hovered(self, event, noHover=False):
+        if event.type == pygame.MOUSEMOTION and not noHover:
+            if self.rect.collidepoint(event.pos):
+                pass
+                #screen.blit(self.image_hover[0], self.rect, self.image_hover[1])
+            else:
+                pass
+                #screen.blit(self.image[0], self.rect, self.image[1])
+
+    def is_clicked(self, event, noHover=False):
+        self.is_hovered(event, noHover)
         if event.type == pygame.MOUSEBUTTONDOWN:
             clickSound = pygame.mixer.Sound(assets["click"])
             pygame.mixer.Sound.set_volume(clickSound, 0.2)
@@ -240,7 +285,13 @@ def menuPrincipal(running=True):
                 exit()
 
             if newGameButton.is_clicked(ev):
-                NomePersonagem()
+                player0name, player0avatar = NomePersonagem(1, 0)
+                player1name, player1avatar = NomePersonagem(1, 1)
+                gameData = s.initGameData(player0name, player1name, player0avatar, player1avatar)
+                print(gameData)
+                while not s.checkWin(gameData):
+                    mostrarBoard(gameData)
+
                 menuPrincipal(False)
 
             if loadGameButton.is_clicked(ev):
@@ -306,7 +357,7 @@ def importCharacters():
     return characters
 
 
-def NomePersonagem(running = True):
+def NomePersonagem(running = True, char=0):
     global lang
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
     screen.blit(tabuleiro, (0, 0), (320 * 6, 0, 320*6, 180*6))
@@ -372,8 +423,8 @@ def NomePersonagem(running = True):
                 running = False
 
             if ok.is_clicked(ev):
-                NomePersonagem2()
-                NomePersonagem(False)
+                return text, clicked
+                running=False
 
             if clicked == None:
                 for a in avis:
@@ -408,115 +459,15 @@ def NomePersonagem(running = True):
         pygame.display.flip()
         clock.tick(FPS)
 
-def NomePersonagem2(running = True):
-    global lang
-    tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
-    screen.blit(tabuleiro, (0, 0), (320 * 6, 0, 320*6, 180*6))
-
-    buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
-    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 2*(2147/1920))
-
-
-    input_box = pygame.Rect(1150, 725, 200, 200)
-    color_inactive = pygame.Color((86,22,12))
-    color_active = pygame.Color((86,22,12))
-    color = color_inactive
-    active = False
-    text = ''
-
-    buttonback = Button((1755, 1005),  # posição
-                   (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
-                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920), 66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),  # imagem default
-                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920)+27 * 2.5*(2147/1920),66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),
-                   )
-    buttonback.draw(screen)
-
-    ok = Button((1330, 430),  # posição
-                   (65 * 2*(2147/1920), 65 * 2*(2147/1920)),  # tamanho
-                   (cursors, (127 * 2*(2147/1920), 255 * 2*(2147/1920), 65 * 2*(2147/1920), 65 * 2*(2147/1920))),  # imagem default
-                   (cursors, (127 * 2*(2147/1920), 255 * 2*(2147/1920), 65 * 2*(2147/1920), 65 * 2*(2147/1920))),
-                   )
-    ok.draw(screen)
-
-
-
-    characters = importCharacters()
-    avis = []
-
-
-    yy = 217
-    cc = 0
-    while yy < 217+108*6 and cc < len(characters):
-        xx = 191
-        while xx < 191+108*6 and cc < len(characters):
-            avis.append(characterSelectButton((xx, yy), characters[cc][1], characters[cc][0]))
-            cc += 1
-            xx += 110
-        yy += 111.5
-
-
-    for a in avis:
-        a.draw(screen)
-
-    screen.fill(0xfab05a, (1308, 132, 58 * 3.2 + 7, 58 * 3.2 + 7))
-
-    clock = pygame.time.Clock()
-
-    clicked = None
-    while running:
-        for ev in pygame.event.get():
-
-            if ev.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-
-            if buttonback.is_clicked(ev):
-                running = False
-
-            if ok.is_clicked(ev):
-                Tabuleiro()
-                NomePersonagem2(False)
-
-            if clicked == None:
-                for a in avis:
-                    if a.is_clicked(ev, noHover=False):
-                        clicked = a.name
-            else:
-                for a in avis:
-                    if a.name == clicked:
-                        a.drawAvi(screen)
-                    if a.is_clicked(ev, noHover=True):
-                        clicked = a.name
-                        a.drawAvi(screen)
-
-            if ev.type == pygame.MOUSEBUTTONDOWN:
-                if input_box.collidepoint(ev.pos):
-                    active = not active
-                else:
-                    active = False
-                color = color_active if active else color_inactive
-            if ev.type == pygame.KEYDOWN:
-                if active:
-                    if ev.key == pygame.K_RETURN:
-                        print(text)
-                        text = ''
-                    elif ev.key == pygame.K_BACKSPACE:
-                        text = text[:-1]
-                    else:
-                        text += ev.unicode
-
-        txt_surface = font.render(text, False, color)
-        screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
-        pygame.display.flip()
-        clock.tick(FPS)
-
-def Tabuleiro(running = True):
+def mostrarBoard(gameData, running = True):
     global lang
 
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
     screen.blit(tabuleiro, (0, 0), (0 , 0, 320*6, 180*6))
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+    cropsP = [(208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
+
 
     buttonback = Button((1755, 1005),  # posição
                    (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
@@ -525,23 +476,16 @@ def Tabuleiro(running = True):
                    )
     buttonback.draw(screen)
 
-    quadradro1 = Button((300, 300),  # posição
-                   (40 * 6, 40 * 6),  # tamanho
-                   (tabuleiro, (534 * 6, 18 * 6, 40 * 6, 40 * 6)),  # imagem default
-                   )
-    quadradro1.draw(screen)
+    bb = [[None, None, None, None], [None, None, None, None], [None, None, None, None]]
 
-    quadradro2 = Button((600, 300),  # posição
-                        (40 * 6, 40 * 6),  # tamanho
-                        (tabuleiro, (534 * 6, 18 * 6, 40 * 6, 40 * 6)),  # imagem default
-                        )
-    quadradro2.draw(screen)
-
-    quadradro3 = Button((900, 300),  # posição
-                        (40 * 6, 40 * 6),  # tamanho
-                        (tabuleiro, (534 * 6, 18 * 6, 40 * 6, 40 * 6)),  # imagem default
-                        )
-    quadradro3.draw(screen)
+    yy = 150
+    for l in range(3):
+        xx = 150
+        for c in range(4):
+            bb[l][c] = boardButton((xx, yy), gameData["board"][l][c])
+            bb[l][c].draw(screen)
+            xx += 250
+        yy += 250
 
     clock = pygame.time.Clock()
 
@@ -552,17 +496,18 @@ def Tabuleiro(running = True):
                 pygame.quit()
                 exit()
 
-            if quadradro1.is_clicked(ev):
-                crops = pygame.transform.scale_by(assets["crops"], 3.6)
-                screen.blit(crops, (334, 326), (208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6))
-
-            if quadradro2.is_clicked(ev):
-                crops = pygame.transform.scale_by(assets["crops"], 3.7)
-                screen.blit(crops, (631, 327), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7))
-
-            if quadradro3.is_clicked(ev):
-                crops = pygame.transform.scale_by(assets["crops"], 3.6)
-                screen.blit(crops, (936, 326), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6))
+            for linha in bb:
+                for b in linha:
+                    if b.is_clicked(ev, noHover=True):
+                        l = bb.index(linha) + 1
+                        c = linha.index(b) + 1
+                        print("clicked")
+                        print(l, c)
+                        if gameData["board"][l-1][c-1] < 3:
+                            if s.checkAvailablePieces(gameData, (l, c)):
+                                s.play(gameData, str(l) + str(c))
+                                print(gameData["board"])
+                                running = False
 
             if buttonback.is_clicked(ev):
                 running=False
