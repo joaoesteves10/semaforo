@@ -85,14 +85,14 @@ class boardButton(object):
         self.position = position
         self.tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
         self.crops = pygame.transform.scale_by(assets["crops"], 3.6)
-        self.cropsP = [None, (208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
+        self.cropsP = [None, (208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.6, 525 * 3.6, 48 * 3.6, 53 * 3.6), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
         self.rect = pygame.Rect(position, size)
         self.piece = piece
 
     def draw(self, screen):
         screen.blit(self.tabuleiro, self.rect, (534 * 6, 18 * 6, 40 * 6, 40 * 6),)
         if self.piece != 0:
-            screen.blit(self.crops, (self.position[0], self.position[1], 40*6, 40*6), self.cropsP[self.piece])
+            screen.blit(self.crops, (self.position[0]+32, self.position[1]+26, 40*6, 40*6), self.cropsP[self.piece])
 
     def is_hovered(self, event, noHover=False):
         if event.type == pygame.MOUSEMOTION and not noHover:
@@ -315,7 +315,7 @@ def SettingseCredits(running = True):
     global lang
     soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 4.5)
     screen.blit(soBoard, (202, 100), (0, 0, 337*4.5, 197*4.5))
-
+    font = pygame.font.Font(assets["font"], 30)
     renderTextCenteredAt(textos[lang]["creditos"], font,(86,22,12),2040,240,screen,600)
 
 
@@ -356,29 +356,25 @@ def importCharacters():
             characters.append((c.split(".")[0], pygame.image.load("./assets/global/Portraits/" + c)))
     return characters
 
+characters = importCharacters()
 
 def NomePersonagem(running = True, char=0):
     global lang
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
     screen.blit(tabuleiro, (0, 0), (320 * 6, 0, 320*6, 180*6))
 
+    font = pygame.font.Font(assets["font"], 60)
+
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 2*(2147/1920))
 
 
-    input_box = pygame.Rect(1150, 725, 200, 200)
+    input_box = pygame.Rect(1200, 800, 500, 200)
     color_inactive = pygame.Color((86,22,12))
     color_active = pygame.Color((86,22,12))
     color = color_inactive
     active = False
     text = ''
-
-    buttonback = Button((1755, 1005),  # posição
-                   (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
-                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920), 66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),  # imagem default
-                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920)+27 * 2.5*(2147/1920),66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),
-                   )
-    buttonback.draw(screen)
 
     ok = Button((1330, 430),  # posição
                    (65 * 2*(2147/1920), 65 * 2*(2147/1920)),  # tamanho
@@ -387,9 +383,11 @@ def NomePersonagem(running = True, char=0):
                    )
     ok.draw(screen)
 
+    if (char ==1):
+     renderTextCenteredAt(textos[lang]["player2"], font,(86,22,12),2550,725,screen,600)
+    else:
+     renderTextCenteredAt(textos[lang]["player1"], font,(86,22,12),2550,725,screen,600)
 
-
-    characters = importCharacters()
     avis = []
 
 
@@ -418,9 +416,6 @@ def NomePersonagem(running = True, char=0):
             if ev.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-
-            if buttonback.is_clicked(ev):
-                running = False
 
             if ok.is_clicked(ev):
                 return text, clicked
@@ -462,30 +457,39 @@ def NomePersonagem(running = True, char=0):
 def mostrarBoard(gameData, running = True):
     global lang
 
+    charAvis = [None, None]
+    for c in characters:
+        if c[0] == gameData["playerAvatars"][0]:
+            charAvis[0] = pygame.transform.scale_by(c[1], 4)
+        if c[0] == gameData["playerAvatars"][1]:
+            charAvis[1] = pygame.transform.scale_by(c[1], 4)
+
+
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
     screen.blit(tabuleiro, (0, 0), (0 , 0, 320*6, 180*6))
 
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
+    screen.blit(cursors, (2, 702), (588 * 4 , 413 * 4, 320 * 4, 100 * 4))
+
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
+    screen.blit(cursors, (1502, 702), (588 * 4 , 413 * 4, 320 * 4, 100 * 4))
+
+    screen.blit(charAvis[0], (82, 726), (0 , 0, 64 * 4, 64 * 4))
+    screen.blit(charAvis[1], (1582, 726), (0 , 0, 64 * 4, 64 * 4))
+
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
     cropsP = [(208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
-
-
-    buttonback = Button((1755, 1005),  # posição
-                   (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
-                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920), 66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),  # imagem default
-                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920)+27 * 2.5*(2147/1920),66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),
-                   )
-    buttonback.draw(screen)
 
     bb = [[None, None, None, None], [None, None, None, None], [None, None, None, None]]
 
     yy = 150
     for l in range(3):
-        xx = 150
+        xx = 432
         for c in range(4):
             bb[l][c] = boardButton((xx, yy), gameData["board"][l][c])
             bb[l][c].draw(screen)
-            xx += 250
-        yy += 250
+            xx += 270
+        yy += 270
 
     clock = pygame.time.Clock()
 
@@ -508,9 +512,6 @@ def mostrarBoard(gameData, running = True):
                                 s.play(gameData, str(l) + str(c))
                                 print(gameData["board"])
                                 running = False
-
-            if buttonback.is_clicked(ev):
-                running=False
 
         pygame.display.flip()
         clock.tick(FPS)
