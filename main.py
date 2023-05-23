@@ -390,6 +390,14 @@ def NomePersonagem(running = True, char=0):
 
     avis = []
 
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+
+
+    exit = Button((1884, -3),  # posição
+                   (12 * 3, 12 * 3),  # tamanho
+                   (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
+                   ))
+    exit.draw(screen)
 
     yy = 217
     cc = 0
@@ -414,6 +422,10 @@ def NomePersonagem(running = True, char=0):
         for ev in pygame.event.get():
 
             if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if exit.is_clicked(ev):
                 pygame.quit()
                 exit()
 
@@ -485,10 +497,17 @@ def mostrarBoard(gameData, running = True):
     fw2, _ = font.size(gameData["playerNames"][1])
     tx2 = 1647 - fw2 / 2
 
-
-
     screen.blit(texto1, (tx1, 1008))
     screen.blit(texto2, (tx2, 1008))
+
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+
+
+    exit = Button((1884, -3),  # posição
+                   (12 * 3, 12 * 3),  # tamanho
+                   (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
+                   ))
+    exit.draw(screen)
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
     cropsP = [(208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
@@ -510,6 +529,10 @@ def mostrarBoard(gameData, running = True):
         for ev in pygame.event.get():
 
             if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if exit.is_clicked(ev):
                 pygame.quit()
                 exit()
 
