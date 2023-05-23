@@ -92,7 +92,7 @@ class boardButton(object):
     def draw(self, screen):
         screen.blit(self.tabuleiro, self.rect, (534 * 6, 18 * 6, 40 * 6, 40 * 6),)
         if self.piece != 0:
-            screen.blit(self.crops, self.rect, self.cropsP[self.piece])
+            screen.blit(self.crops, (self.position[0], self.position[1], 40*6, 40*6), self.cropsP[self.piece])
 
     def is_hovered(self, event, noHover=False):
         if event.type == pygame.MOUSEMOTION and not noHover:
