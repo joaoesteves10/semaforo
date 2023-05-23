@@ -464,7 +464,6 @@ def mostrarBoard(gameData, running = True):
         if c[0] == gameData["playerAvatars"][1]:
             charAvis[1] = pygame.transform.scale_by(c[1], 4)
 
-
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
     screen.blit(tabuleiro, (0, 0), (0 , 0, 320*6, 180*6))
 
@@ -476,6 +475,20 @@ def mostrarBoard(gameData, running = True):
 
     screen.blit(charAvis[0], (82, 726), (0 , 0, 64 * 4, 64 * 4))
     screen.blit(charAvis[1], (1582, 726), (0 , 0, 64 * 4, 64 * 4))
+
+    f = pygame.font.Font(assets["font"], 60)
+    texto1 = f.render(gameData["playerNames"][0], False, (88, 12, 22))
+    fw1, _ = f.size(gameData["playerNames"][0])
+    tx1 = 210 - fw1 / 2
+
+    texto2 = f.render(gameData["playerNames"][1], False, (88, 12, 22))
+    fw2, _ = font.size(gameData["playerNames"][1])
+    tx2 = 1647 - fw2 / 2
+
+
+
+    screen.blit(texto1, (tx1, 1008))
+    screen.blit(texto2, (tx2, 1008))
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
     cropsP = [(208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
