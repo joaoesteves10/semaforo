@@ -252,50 +252,15 @@ def replayGame(gameData):
                     else:
                         print("Escolha inválida!")
 
-
             replay["turn"] = (replay["turn"] + 1) % 2 # para voltar ao jogador que ganhou
             clear()
             printPlay(replay, -1)
             print("Fim do jogo")
             printBoard(replay)
             print(replay["playerNames"][replay["turn"]], "ganhou!")
-
-
-
-            """
-            simGameData = s.initGameData(gameData["playerNames"][0], gameData["playerNames"][1])
-            simBoard = simGameData["board"]
-            for play in gameData["history"]:
-                clear()
-                if play[1] == "pass":
-                    s.passarVez(simGameData)
-                    simGameData["history"].append(play)
-                    printLastPlay(simGameData)
-                    printBoard(simGameData)
-                else:
-                    s.play(simGameData, play[1])
-                    printLastPlay(simGameData, timeStamp = True)
-                    printBoard(simGameData)
-                print("--------------------")
-                print("ESCOLHA 0 PARA PLAY ANTERIOR, ENTER PARA PLAY SEGUINTE, -1 PARA SAIR")
-                avancar = " "
-                while avancar not in ["-1", "0", ""]:
-                    avancar = input()
-                    if avancar == "":
-                        break
-                    elif avancar == "-1":
-                        return
-                    elif avancar == "0":
-                        simGameData = s.reverseLastPlay(simGameData)
-                        continue
-                    else:
-                        print("Escolha inválida!")
-            """
         elif escolha.lower() == "n":
             break
         else:
             print("Escolha inválida!")
-
-            ## falta checkwin, iniciar mostrando quem começa c/ board vazia, resolver random em quem começ
 
 mainMenu()
