@@ -20,12 +20,12 @@ assets = {
     "en": {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
         "cursors": pygame.image.load("./assets/en/Cursors.png"),
-        "tot1": pygame.image.load("./assets/pt/tot1.png"),
-        "tot2": pygame.image.load("./assets/pt/tot2.png"),
-        "tot3": pygame.image.load("./assets/pt/tot3.png"),
-        "tot4": pygame.image.load("./assets/pt/tot4.png"),
-        "tot5": pygame.image.load("./assets/pt/tot5.png"),
-        "tot6": pygame.image.load("./assets/pt/tot6.png"),
+        "tot1": pygame.image.load("./assets/en/tot1.png"),
+        "tot2": pygame.image.load("./assets/en/tot2.png"),
+        "tot3": pygame.image.load("./assets/en/tot3.png"),
+        "tot4": pygame.image.load("./assets/en/tot4.png"),
+        "tot5": pygame.image.load("./assets/en/tot5.png"),
+        "tot6": pygame.image.load("./assets/en/tot6.png"),
     },
     "tabuleiro": pygame.image.load("./assets/global/tabuleiro.png"),
     "logo": pygame.image.load("./assets/global/novalogo2.png"),
@@ -307,7 +307,8 @@ def menuPrincipal(running=True):
                 menuPrincipal(False)
 
             if loadGameButton.is_clicked(ev):
-                continue
+                Tutorial()
+                menuPrincipal(False)
 
             if rulesButton.is_clicked(ev):
                 continue
