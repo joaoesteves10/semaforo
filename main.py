@@ -290,6 +290,7 @@ def menuPrincipal(running=True):
                 gameData = s.initGameData(player0name, player1name, player0avatar, player1avatar)
                 print(gameData)
                 while not s.checkWin(gameData):
+                    s.autoSave(gameData)
                     mostrarBoard(gameData)
 
                 menuPrincipal(False)
