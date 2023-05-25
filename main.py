@@ -10,10 +10,22 @@ assets = {
     "pt": {
         "buttons": pygame.image.load("./assets/pt/TitleButtons.png"),
         "cursors": pygame.image.load("./assets/pt/Cursors.png"),
+        "tot1": pygame.image.load("./assets/pt/tot1.png"),
+        "tot2": pygame.image.load("./assets/pt/tot2.png"),
+        "tot3": pygame.image.load("./assets/pt/tot3.png"),
+        "tot4": pygame.image.load("./assets/pt/tot4.png"),
+        "tot5": pygame.image.load("./assets/pt/tot5.png"),
+        "tot6": pygame.image.load("./assets/pt/tot6.png"),
     },
     "en": {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
         "cursors": pygame.image.load("./assets/en/Cursors.png"),
+        "tot1": pygame.image.load("./assets/en/tot1.png"),
+        "tot2": pygame.image.load("./assets/en/tot2.png"),
+        "tot3": pygame.image.load("./assets/en/tot3.png"),
+        "tot4": pygame.image.load("./assets/en/tot4.png"),
+        "tot5": pygame.image.load("./assets/en/tot5.png"),
+        "tot6": pygame.image.load("./assets/en/tot6.png"),
     },
     "tabuleiro": pygame.image.load("./assets/global/tabuleiro.png"),
     "logo": pygame.image.load("./assets/global/novalogo2.png"),
@@ -187,7 +199,7 @@ pygame.mixer.music.load(assets["welcomeToTheMato"])
 pygame.mixer.music.set_volume(0.3)
 pygame.mixer.music.play(0)
 muteButtonAsset = {
-    "muted": (137 * 3*(2147/1920), 384 * 3*(2147/1920), 9 * 3*(2147/1920), 8 * 3*(2147/1920)),
+    "muted": (137 * 3*(2147/1920)+1, 384 * 3*(2147/1920), 9 * 3*(2147/1920), 8 * 3*(2147/1920)),
     "unmuted": (128 * 3*(2147/1920), 384 * 3*(2147/1920), 9 * 3*(2147/1920), 8 * 3*(2147/1920)),
 }
 muteButton = Button((20, 20), # posição
@@ -296,7 +308,8 @@ def menuPrincipal(running=True):
                 menuPrincipal(False)
 
             if loadGameButton.is_clicked(ev):
-                continue
+                Tutorial()
+                menuPrincipal(False)
 
             if rulesButton.is_clicked(ev):
                 continue
@@ -391,6 +404,14 @@ def NomePersonagem(running = True, char=0):
 
     avis = []
 
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+
+
+    exit = Button((1884, -3),  # posição
+                   (12 * 3, 12 * 3),  # tamanho
+                   (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
+                   ))
+    exit.draw(screen)
 
     yy = 217
     cc = 0
@@ -415,6 +436,10 @@ def NomePersonagem(running = True, char=0):
         for ev in pygame.event.get():
 
             if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if exit.is_clicked(ev):
                 pygame.quit()
                 exit()
 
@@ -486,10 +511,17 @@ def mostrarBoard(gameData, running = True):
     fw2, _ = font.size(gameData["playerNames"][1])
     tx2 = 1647 - fw2 / 2
 
-
-
     screen.blit(texto1, (tx1, 1008))
     screen.blit(texto2, (tx2, 1008))
+
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+
+
+    exit = Button((1884, -3),  # posição
+                   (12 * 3, 12 * 3),  # tamanho
+                   (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
+                   ))
+    exit.draw(screen)
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
     cropsP = [(208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
@@ -514,6 +546,10 @@ def mostrarBoard(gameData, running = True):
                 pygame.quit()
                 exit()
 
+            if exit.is_clicked(ev):
+                pygame.quit()
+                exit()
+
             for linha in bb:
                 for b in linha:
                     if b.is_clicked(ev, noHover=True):
@@ -526,6 +562,42 @@ def mostrarBoard(gameData, running = True):
                                 s.play(gameData, str(l) + str(c))
                                 print(gameData["board"])
                                 running = False
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+def Tutorial(running=True):
+    global lang
+
+
+
+    tot1 = pygame.transform.scale_by(assets[lang]["tot1"], 1)
+    tot2 = pygame.transform.scale_by(assets[lang]["tot2"], 1)
+    tot3 = pygame.transform.scale_by(assets[lang]["tot3"], 1)
+    tot4 = pygame.transform.scale_by(assets[lang]["tot4"], 1)
+    tot5 = pygame.transform.scale_by(assets[lang]["tot5"], 1)
+    tot6 = pygame.transform.scale_by(assets[lang]["tot6"], 1)
+
+
+    tot1 = Button((0, 0),  # posição
+                           (1920, 1080),  # tamanho
+                           (tot1, (0, 0, 1920, 1080)),  # imagem default
+                           )
+    tot1.draw(screen)
+
+
+
+    clock = pygame.time.Clock()
+    while running:
+        for ev in pygame.event.get():
+
+          if ev.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+
+          if tot1.is_clicked(ev):
+              pygame.quit()
+              exit()
 
         pygame.display.flip()
         clock.tick(FPS)
