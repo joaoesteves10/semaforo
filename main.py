@@ -199,7 +199,7 @@ pygame.mixer.music.load(assets["welcomeToTheMato"])
 pygame.mixer.music.set_volume(0.3)
 pygame.mixer.music.play(0)
 muteButtonAsset = {
-    "muted": (137 * 3*(2147/1920), 384 * 3*(2147/1920), 9 * 3*(2147/1920), 8 * 3*(2147/1920)),
+    "muted": (137 * 3*(2147/1920)+1, 384 * 3*(2147/1920), 9 * 3*(2147/1920), 8 * 3*(2147/1920)),
     "unmuted": (128 * 3*(2147/1920), 384 * 3*(2147/1920), 9 * 3*(2147/1920), 8 * 3*(2147/1920)),
 }
 muteButton = Button((20, 20), # posição
