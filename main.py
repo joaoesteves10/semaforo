@@ -569,13 +569,20 @@ def mostrarBoard(gameData, running = True):
 
 def Tutorial(i=1, running=True):
     global lang
-
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
     tot = pygame.transform.scale_by(assets[lang]["tot"+ str(i)], 1)
+
     totB = Button((0, 0),  # posição
                  (1920, 1080),  # tamanho
                  (tot, (0, 0, 1920, 1080)),  # imagem default
                 )
     totB.draw(screen)
+
+    exit = Button((1884, -3),  # posição
+                   (12 * 3, 12 * 3),  # tamanho
+                   (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
+                   ))
+    exit.draw(screen)
 
     clock = pygame.time.Clock()
     while running:
@@ -585,8 +592,12 @@ def Tutorial(i=1, running=True):
                 pygame.quit()
                 exit()
 
+            if exit.is_clicked(ev):
+                pygame.quit()
+                exit()
+
             if totB.is_clicked(ev):
-                running = False
+               running = False
 
         pygame.display.flip()
         clock.tick(FPS)
