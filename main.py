@@ -311,7 +311,8 @@ def menuPrincipal(running=True):
                 continue
 
             if rulesButton.is_clicked(ev):
-                Tutorial()
+                for i in range(1, 7):
+                    Tutorial(i)
                 menuPrincipal(False)
 
             if creditsButton.is_clicked(ev):
@@ -566,38 +567,27 @@ def mostrarBoard(gameData, running = True):
         pygame.display.flip()
         clock.tick(FPS)
 
-def Tutorial(running=True):
+def Tutorial(i=1, running=True):
     global lang
 
-
-
-    tot1 = pygame.transform.scale_by(assets[lang]["tot1"], 1)
-    tot2 = pygame.transform.scale_by(assets[lang]["tot2"], 1)
-    tot3 = pygame.transform.scale_by(assets[lang]["tot3"], 1)
-    tot4 = pygame.transform.scale_by(assets[lang]["tot4"], 1)
-    tot5 = pygame.transform.scale_by(assets[lang]["tot5"], 1)
-    tot6 = pygame.transform.scale_by(assets[lang]["tot6"], 1)
-
-
-    tot1 = Button((0, 0),  # posição
-                           (1920, 1080),  # tamanho
-                           (tot1, (0, 0, 1920, 1080)),  # imagem default
-                           )
-    tot1.draw(screen)
-
-
+    tot = pygame.transform.scale_by(assets[lang]["tot"+ str(i)], 1)
+    totB = Button((0, 0),  # posição
+                 (1920, 1080),  # tamanho
+                 (tot, (0, 0, 1920, 1080)),  # imagem default
+                )
+    totB.draw(screen)
 
     clock = pygame.time.Clock()
     while running:
         for ev in pygame.event.get():
 
-          if ev.type == pygame.QUIT:
-            pygame.quit()
-            exit()
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
 
-          if tot1.is_clicked(ev):
-              screen.blit(tot2)
-              exit()
+            if totB.is_clicked(ev):
+                screen.fill((0, 0, 0))
+                running = False
 
         pygame.display.flip()
         clock.tick(FPS)
