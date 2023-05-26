@@ -308,11 +308,11 @@ def menuPrincipal(running=True):
                 menuPrincipal(False)
 
             if loadGameButton.is_clicked(ev):
-                Tutorial()
-                menuPrincipal(False)
+                continue
 
             if rulesButton.is_clicked(ev):
-                continue
+                Tutorial()
+                menuPrincipal(False)
 
             if creditsButton.is_clicked(ev):
                 SettingseCredits()
@@ -596,7 +596,7 @@ def Tutorial(running=True):
             exit()
 
           if tot1.is_clicked(ev):
-              pygame.quit()
+              screen.blit(tot2)
               exit()
 
         pygame.display.flip()
