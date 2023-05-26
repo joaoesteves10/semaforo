@@ -586,7 +586,6 @@ def Tutorial(i=1, running=True):
                 exit()
 
             if totB.is_clicked(ev):
-                screen.fill((0, 0, 0))
                 running = False
 
         pygame.display.flip()
