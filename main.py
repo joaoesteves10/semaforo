@@ -9,6 +9,7 @@ pygame.font.init()
 assets = {
     "pt": {
         "buttons": pygame.image.load("./assets/pt/TitleButtons.png"),
+        "save": pygame.image.load("./assets/pt/Billboard.pt-BR.png"),
         "cursors": pygame.image.load("./assets/pt/Cursors.png"),
         "tot1": pygame.image.load("./assets/pt/tot1.png"),
         "tot2": pygame.image.load("./assets/pt/tot2.png"),
@@ -19,6 +20,7 @@ assets = {
     },
     "en": {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
+        "save": pygame.image.load("./assets/en/Billboard.png"),
         "cursors": pygame.image.load("./assets/en/Cursors.png"),
         "tot1": pygame.image.load("./assets/en/tot1.png"),
         "tot2": pygame.image.load("./assets/en/tot2.png"),
@@ -308,7 +310,8 @@ def menuPrincipal(running=True):
                 menuPrincipal(False)
 
             if loadGameButton.is_clicked(ev):
-                continue
+                saves()
+                menuPrincipal(False)
 
             if rulesButton.is_clicked(ev):
                 for i in range(1, 7):
@@ -321,6 +324,42 @@ def menuPrincipal(running=True):
 
             if languageButton.is_clicked(ev):
                 lang = "en" if lang == "pt" else "pt"
+                running = False
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+def saves(running = True):
+    global lang
+    soBoard = pygame.transform.scale_by(assets[lang]["save"], 4.5)
+    screen.blit(soBoard, (202, 100), (0, 0, 337*4.5, 197*4.5))
+
+
+
+    buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+
+    buttonback = Button((1755, 1005),  # posição
+                   (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920), 66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),  # imagem default
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920)+27 * 2.5*(2147/1920),66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),
+                   )
+    buttonback.draw(screen)
+
+    muteButton.draw(screen)
+
+    clock = pygame.time.Clock()
+
+    while running:
+        for ev in pygame.event.get():
+
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if muteButton.is_clicked(ev):
+                toggleMusic()
+
+            if buttonback.is_clicked(ev):
                 running = False
 
         pygame.display.flip()
