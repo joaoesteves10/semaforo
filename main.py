@@ -9,6 +9,7 @@ pygame.font.init()
 assets = {
     "pt": {
         "buttons": pygame.image.load("./assets/pt/TitleButtons.png"),
+        "skip": pygame.image.load("./assets/pt/skip.png"),
         "save": pygame.image.load("./assets/pt/Billboard.pt-BR.png"),
         "cursors": pygame.image.load("./assets/pt/Cursors.png"),
         "tot1": pygame.image.load("./assets/pt/tot1.png"),
@@ -20,6 +21,7 @@ assets = {
     },
     "en": {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
+        "skip": pygame.image.load("./assets/en/skip.png"),
         "save": pygame.image.load("./assets/en/Billboard.png"),
         "cursors": pygame.image.load("./assets/en/Cursors.png"),
         "tot1": pygame.image.load("./assets/en/tot1.png"),
@@ -577,6 +579,15 @@ def mostrarBoard(gameData, running = True):
             xx += 270
         yy += 270
 
+    skip = pygame.transform.scale_by(assets[lang]["skip"], 1)
+
+    skip = Button((842, 966),  # posição
+                   (59 * 4 , 27 * 4 ),  # tamanho
+                   (skip, (0, 0,  60 * 4 , 27 * 4)),  # imagem default
+                   )
+    skip.draw(screen)
+
+
     clock = pygame.time.Clock()
 
     while running:
@@ -587,6 +598,10 @@ def mostrarBoard(gameData, running = True):
                 exit()
 
             if exit.is_clicked(ev):
+                pygame.quit()
+                exit()
+
+            if skip.is_clicked(ev):
                 pygame.quit()
                 exit()
 
