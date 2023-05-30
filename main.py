@@ -87,6 +87,24 @@ class Button(object):
                 # screen.blit(self.image_down[0], self.rect, self.image_down[1])
                 return self.rect.collidepoint(event.pos)
 
+
+class boolButton(object):
+    def __init__(self, position, size, image, posON, posOFF):
+
+            self.size = size
+            self.position = position
+            self.rect = pygame.Rect(position, size)
+            self.image = image
+            self.pos = [posOFF, posON]
+
+    def draw(self, screen, selected):
+        screen.blit(self.image, self.rect, self.pos[selected])
+
+    def is_clicked(self, event, selected):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                return self.rect.collidepoint(event.pos)
+
 class boardButton(object):
     def __init__(self, position, piece):
 
