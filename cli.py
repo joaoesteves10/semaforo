@@ -48,9 +48,11 @@ def printPiece(piece):
         case 2: print(colored("2", "yellow"), end="")
         case 3: print(colored("3", "red"), end="")
 
+cores = ["light_blue", "light_magenta"]
+
 def novoJogoPvP():
-    player1 = input("Nome do jogador 1: ")
-    player2 = input("Nome do jogador 2: ")
+    player1 = input("Nome do " + colored("jogador 1", cores[0]) + ": ")
+    player2 = input("Nome do " + colored("jogador 2", cores[1]) + ": ")
     gameData = s.initGameData(player1, player2)
     gameLoop(gameData)
 
@@ -142,10 +144,10 @@ def numToColor(num):
 def printPlay(gameData, play):
     lastPlay = gameData["history"][play]
     if lastPlay[1] == "pass":
-        print(gameData["playerNames"][lastPlay[0]], "passou a vez.")
+        print(colored(gameData["playerNames"][lastPlay[0]], cores[lastPlay[0]]), "passou a vez.")
         return
 
-    outString = gameData["playerNames"][lastPlay[0]] + " jogou em " + lastPlay[1] + ", "
+    outString = colored(gameData["playerNames"][lastPlay[0]], cores[lastPlay[0]]) + " jogou em " + lastPlay[1] + ", "
     beforeColor = numToColor(lastPlay[2][0])
     afterColor = numToColor(lastPlay[2][1])
     if beforeColor == None:
@@ -158,18 +160,22 @@ def printLastPlay(gameData, timeStamp = False):
     if gameData["history"] == []:
         if timeStamp:
             print(datetime.utcfromtimestamp(gameData["startTime"]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
-        print(gameData["playerNames"][gameData["turn"]], "joga primeiro.")
-        return
-
-    if len(gameData["history"]) > 1:
+        print(colored(gameData["playerNames"][gameData["turn"]], cores[gameData["turn"]]), "joga primeiro.")
+    else:
         if timeStamp:
-            print(datetime.utcfromtimestamp(gameData["history"][-2][3]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
-        printPlay(gameData, -2)
+            print(datetime.utcfromtimestamp(gameData["history"][0][3]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
+        print(colored(gameData["playerNames"][gameData["history"][0][0]], cores[gameData["history"][-1][0]]), "joga primeiro.")
 
-    if timeStamp:
-        print(datetime.utcfromtimestamp(gameData["history"][-1][3]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
-    printPlay(gameData, -1)
-    return
+    for i in gameData["history"]:
+        if timeStamp:
+            print(datetime.utcfromtimestamp(gameData["history"][gameData["history"].index(i)][3]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
+        printPlay(gameData, gameData["history"].index(i))
+
+    if gameData["ended"] == True:
+        if timeStamp:
+            print(datetime.utcfromtimestamp(gameData["history"][-1][3]).strftime('%Y-%m-%d %H:%M:%S'), end=": ")
+        print(colored(gameData["playerNames"][gameData["history"][-1][0]], cores[gameData["turn"]]), "ganhou!")
+
 
 inGame = True
 def gameLoop(gameData):
@@ -181,7 +187,7 @@ def gameLoop(gameData):
         printBoard(gameData)
         while True:
 
-            play = input("Jogador " + gameData["playerNames"][gameData["turn"]] + " (linha, coluna / \"pass\" / \"sair\"): ")
+            play = input("Jogador " + colored(gameData["playerNames"][gameData["turn"]], cores[gameData["turn"]]) + " (linha, coluna / \"pass\" / \"sair\"): ")
 
             if play == "sair":
                 s.saveGame(gameData)
@@ -202,15 +208,12 @@ def gameLoop(gameData):
                     break
             else:
                 print("jogada inválida")
-        gameData["turn"] = (gameData["turn"] + 1) % 2
-    gameData["turn"] = (gameData["turn"] + 1) % 2 # para voltar ao jogador que ganhou
+    s.passarVez(gameData) # para voltar ao jogador que ganhou
     if inGame:
         s.saveGame(gameData)
         clear()
-        printPlay(gameData, -1)
-        print("Fim do jogo")
+        printLastPlay(gameData)
         printBoard(gameData)
-        print(gameData["playerNames"][gameData["turn"]], "ganhou!")
     else:
         print("Jogo guardado com sucesso.")
 

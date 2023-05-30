@@ -38,6 +38,7 @@ def checkAvailablePieces(gameData, play):
 
 def passarVez(gameData):
     gameData["turn"] = (gameData["turn"] + 1) % 2
+    return gameData
 
 def checkWin(gameData):
     board = gameData["board"]
@@ -74,15 +75,13 @@ def play(gameData, play):
     player = gameData["turn"]
     if play == "pass":
         gameData["history"].append((player, play, (None, None), time.time()))
-        passarVez(gameData)
-        return gameData
+        return passarVez(gameData)
 
     beforeValue = gameData["board"][int(play[0])-1][int(play[1])-1]
     gameData["board"][int(play[0])-1][int(play[1])-1] += 1
     afterValue = gameData["board"][int(play[0])-1][int(play[1])-1]
     gameData["history"].append((player, play, (beforeValue, afterValue), time.time()))
-
-    return gameData
+    return passarVez(gameData)
 
 def reverseLastPlay(gameData):
     if len(gameData["history"]) == 0:
