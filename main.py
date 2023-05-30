@@ -100,7 +100,7 @@ class boolButton(object):
     def draw(self, screen, selected):
         screen.blit(self.image, self.rect, self.pos[selected])
 
-    def is_clicked(self, event, selected):
+    def is_clicked(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 return self.rect.collidepoint(event.pos)
@@ -437,7 +437,7 @@ def NomePersonagem(running = True, char=0):
     global lang
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
     screen.blit(tabuleiro, (0, 0), (320 * 6, 0, 320*6, 180*6))
-
+    a=0
     font = pygame.font.Font(assets["font"], 60)
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
@@ -458,15 +458,23 @@ def NomePersonagem(running = True, char=0):
                    )
     ok.draw(screen)
 
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+
     if (char ==1):
      renderTextCenteredAt(textos[lang]["player2"], font,(86,22,12),2550,725,screen,600)
+
+     bot = boolButton((0, 0),  # posição
+                   (9 * 3, 9 * 3),  # tamanho
+                   (cursors),
+                   (226 * 3, 424 * 3, 9 * 3, 9 * 3),# imagem default
+                   (226 * 3, 424 * 3, 9 * 3, 9 * 3),# imagem default
+                   )
+     bot.draw(screen,a)
+
     else:
      renderTextCenteredAt(textos[lang]["player1"], font,(86,22,12),2550,725,screen,600)
 
     avis = []
-
-    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
-
 
     exit = Button((1884, -3),  # posição
                    (12 * 3, 12 * 3),  # tamanho
@@ -503,6 +511,10 @@ def NomePersonagem(running = True, char=0):
             if exit.is_clicked(ev):
                 pygame.quit()
                 exit()
+
+            if (char == 1):
+                if bot.is_clicked(ev):
+                   a=1
 
             if ok.is_clicked(ev):
                 return text, clicked
