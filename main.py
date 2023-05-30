@@ -95,13 +95,16 @@ class boolButton(object):
             self.position = position
             self.rect = pygame.Rect(position, size)
             self.image = image
-            self.pos = [posOFF, posON]
+            self.ipos = [posOFF, posON]
             self.backgroundColor = backgroundColor
 
-    def draw(self, screen, selected):
-        print(selected)
+    def draw(self, screen, boolVal):
+        print(boolVal)
         screen.fill(self.backgroundColor, self.rect)
-        screen.blit(self.image, self.rect, self.pos[selected])
+        if boolVal:
+            screen.blit(self.image, self.rect, self.ipos[1])
+        else:
+            screen.blit(self.image, self.rect, self.ipos[0])
 
     def is_clicked(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -437,10 +440,10 @@ def importCharacters():
 characters = importCharacters()
 
 def NomePersonagem(running = True, char=0):
+    boolVal = 0
     global lang
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
     screen.blit(tabuleiro, (0, 0), (320 * 6, 0, 320*6, 180*6))
-    a=1
     font = pygame.font.Font(assets["font"], 60)
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
@@ -472,7 +475,7 @@ def NomePersonagem(running = True, char=0):
                    (226 * 3, 424 * 3, 10 * 3, 10 * 3),
                    "0xfadc97"
                    )
-        bot.draw(screen, a)
+        bot.draw(screen, boolVal)
 
     else:
         renderTextCenteredAt(textos[lang]["player1"], font,(86,22,12),2550,725,screen,600)
@@ -517,8 +520,13 @@ def NomePersonagem(running = True, char=0):
 
             if (char == 1):
                 if bot.is_clicked(ev):
-                    a = 0
-                    bot.draw(screen, a)
+                    print(boolVal)
+                    if boolVal == 1:
+                        boolVal = 0
+                    else:
+                        boolVal = 1
+                    print(boolVal)
+                    bot.draw(screen, boolVal)
 
             if ok.is_clicked(ev):
                 return text, clicked
