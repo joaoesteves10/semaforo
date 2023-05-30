@@ -1,11 +1,13 @@
 ## módulo com a lógica para o jogo do semáforo
 import random, json, os, time
 
-def initGameData(player1, player2, avatar1=None, avatar2=None, gameType="local"):
+def initGameData(player1, player2, avatar1=None, avatar2=None, gameType="local", onlineGameID=None, onlineIsPublic=False):
     return {
         "startTime": time.time(), # timestamp do início do jogo, usado para display nos saves
         "ended": False, # se o jogo já acabou, usado para display nos saves
         "gameType": gameType, # "local", "online", "bot"
+        "onlineGameID": onlineGameID, # None se for local ou bot
+        "onlineIsPublic": onlineIsPublic,
         "playerNames": [player1, player2],
         "playerAvatars": [avatar1, avatar2], # será usado pela GUI, desnecessário para a lógica e CLI
         "turn": random.randint(0,1), # 0 = player1, 1 = player2

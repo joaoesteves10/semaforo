@@ -3,6 +3,8 @@ from datetime import datetime
 from termcolor import colored
 import logicaSemaforo as s
 import time
+import onlinePlay as o
+import json
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -31,10 +33,14 @@ def mainMenu():
             print("NOVO JOGO ----")
             print("1: Jogador contra jogador")
             print("2: Jogador contra computador")
+            print("3: Jogar online")
+            print("4: Voltar ao menu principal")
             escolha = int(input("\nEscolha uma opção: "))
             match escolha:
                 case 1: novoJogoPvP()
                 case 2: novoJogoPvB()
+                case 3: playOnline()
+                case 4: mainMenu()
                 case _:
                     input("opção inválida, clique em qualquer tecla para voltar ao menu principal")
                     mainMenu()
@@ -44,6 +50,111 @@ def mainMenu():
         case _:
             input("opção inválida, clique em qualquer tecla para voltar ao menu principal")
             mainMenu()
+
+with open("config.json", "r") as configFile:
+    config = json.load(configFile)
+
+ip = config["ip"]
+port = config["port"]
+
+def playOnline():
+    print("A estabelecer ligação ao servidor...")
+    websocket = o.mkWebSocket(ip, port)
+    if websocket == False:
+        print("Não foi possível estabelecer ligação ao servidor.")
+    else:
+        escolha = 0
+        while escolha not in ["1", "2", "3", "4"]:
+            clear()
+            print("Conectado ao servidor " + "ws://"+ip+":"+port)
+            print("JOGAR ONLINE ----")
+            print("1: Criar um novo jogo")
+            print("2: Entrar num jogo existente")
+            print("3: Ver jogos públicos disponíveis")
+            print("4: Voltar ao menu principal")
+            escolha = input("\nEscolha uma opção: ")
+            match escolha:
+                case "1":
+                    escolha = ""
+                    public = False
+                    while escolha not in [1, 2]:
+                        escolha = int(input("Deseja criar um jogo público ou privado? [1/2]: "))
+                        if escolha == 1:
+                            public = True
+
+                    name = input("Nome: ")
+                    print("A criar novo jogo...")
+                    response = o.newGame(name, None, public)
+                    if response[0] == "newGameCreated":
+                        print("criado jogo com ID", response[1])
+                        gameID = response[1]
+                        gameData = False
+                        waiting = True
+                        trycount = 10
+                        while waiting and not gameData:
+                            waiting, gameData = o.waitForGame(gameID, name, 0)
+                            if waiting == "gameExists, ONEPLAYER" and trycount == 10:
+                                print(gameID + ": à espera de outro jogador...")
+                                trycount = 0
+                            trycount += 1
+                            if waiting == "Error":
+                                print("ERRO!")
+                            time.sleep(0.5)
+                        if gameData:
+                            gameLoop(gameData, localPlayer=0)
+                    else:
+                        print("Erro ao criar jogo:", response)
+
+                case "2":
+                    gameID = input("ID do jogo: ")
+                    name = input("Nome: ")
+                    print("A tentar entrar no jogo", gameID, "...")
+                    gameData = False
+                    waiting = True
+                    while waiting and not gameData:
+                        waiting, gameData = o.waitForGame(gameID, name, 1, None)
+                        if waiting == "Error":
+                            print("ERRO!")
+                        time.sleep(0.5)
+                    if gameData:
+                        gameLoop(gameData, localPlayer=1)
+
+                case "3":
+                    print("A procurar jogos públicos...")
+                    games = o.listGames()
+                    validGameList = []
+                    if games[0] == "openGames":
+                        print("JOGOS DISPONÍVEIS ----")
+                        for g in games[1]:
+                            ggd = g[1]
+                            gID = ggd["onlineGameID"]
+                            gPlayer1 = ggd["playerNames"][0]
+                            print(f"[{gID}] JOGO DE {gPlayer1}")
+                            validGameList.append(gID)
+                        print("--------------------")
+                        escolha = ""
+                        while escolha not in validGameList:
+                            escolha = input("Escolha um jogo pelo seu ID (\"back\" para voltar): ")
+                            if escolha == "back":
+                                break
+                            elif escolha in validGameList:
+                                name = input("Nome: ")
+                                print("A tentar entrar no jogo", escolha, "...")
+                                gameData = False
+                                waiting = True
+                                while waiting and not gameData:
+                                    waiting, gameData = o.waitForGame(escolha, name, 1, None)
+                                    if waiting == "Error":
+                                        print("ERRO!")
+                                    time.sleep(0.5)
+                                if gameData:
+                                    gameLoop(gameData, localPlayer=1)
+                                    quit()
+                            else:
+                                print("Escolha inválida!")
+                    else:
+                        print("Não foram encontrados jogos públicos.")
+
 
 def printBoard(gameData):
     print("  1 | 2 | 3 | 4 |")
@@ -199,7 +310,7 @@ def printLastPlay(gameData, timeStamp = False):
 
 
 inGame = True
-def gameLoop(gameData):
+def gameLoop(gameData, localPlayer=0):
     global inGame
     while (not s.checkWin(gameData)) and inGame:
         s.autoSave(gameData)
@@ -211,6 +322,18 @@ def gameLoop(gameData):
                 print("O computador está a pensar...")
                 time.sleep(1)
                 s.botPlay(gameData)
+                continue
+        elif gameData["gameType"] == "online":
+            if gameData["turn"] != localPlayer:
+                t = 10
+                rGameData = False
+                while not rGameData:
+                    if t==10:
+                        print("à espera da jogada adversária...")
+                        t=0
+                    rGameData = o.getPlay(gameData)
+                    t+=1
+                    time.sleep(0.5)
                 continue
 
         while True:
@@ -232,9 +355,21 @@ def gameLoop(gameData):
                     print("jogada inválida, não há peças disponíveis")
                 else:
                     s.play(gameData, play)
+
+                    if gameData["gameType"] == "online":
+                        send = o.sendPlay(localPlayer, play, gameData)
+                        if send == "ok":
+                            print("jogada enviada com sucesso, continuando")
+                            break
+                        else:
+                            print("erro ao enviar jogada")
+                            print(send)
+                            exit()
+
                     break
             else:
                 print("jogada inválida")
+
     s.passarVez(gameData) # para voltar ao jogador que ganhou
     if inGame:
         s.saveGame(gameData)
