@@ -99,7 +99,6 @@ class boolButton(object):
             self.backgroundColor = backgroundColor
 
     def draw(self, screen, boolVal):
-        print(boolVal)
         screen.fill(self.backgroundColor, self.rect)
         if boolVal:
             screen.blit(self.image, self.rect, self.ipos[1])
@@ -468,11 +467,11 @@ def NomePersonagem(running = True, char=0):
 
     if (char ==1):
         renderTextCenteredAt(textos[lang]["player2"], font,(86,22,12),2550,725,screen,600)
-        bot = boolButton((0, 0),
+        bot = boolButton((1300, 600),
                    (9 * 3, 9 * 3),
                    (cursors),
-                   (236 * 3, 424 * 3, 10 * 3, 10 * 3),
-                   (226 * 3, 424 * 3, 10 * 3, 10 * 3),
+                   (236 * 3, 425 * 3, 9 * 3, 9 * 3),
+                   (227 * 3, 425 * 3, 9 * 3, 9 * 3),
                    "0xfadc97"
                    )
         bot.draw(screen, boolVal)
@@ -520,12 +519,10 @@ def NomePersonagem(running = True, char=0):
 
             if (char == 1):
                 if bot.is_clicked(ev):
-                    print(boolVal)
                     if boolVal == 1:
                         boolVal = 0
                     else:
                         boolVal = 1
-                    print(boolVal)
                     bot.draw(screen, boolVal)
 
             if ok.is_clicked(ev):
