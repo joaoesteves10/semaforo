@@ -2,3 +2,4 @@
 __pycache__/
 save.json
 autosave.json
+config.json
