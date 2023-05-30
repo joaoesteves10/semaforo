@@ -32,6 +32,7 @@ assets = {
         "tot6": pygame.image.load("./assets/en/tot6.png"),
     },
     "tabuleiro": pygame.image.load("./assets/global/tabuleiro.png"),
+    "tabuleiro2": pygame.image.load("./assets/global/tabuleiro2.png"),
     "logo": pygame.image.load("./assets/global/novalogo2.png"),
     "clouds": pygame.image.load("./assets/global/Clouds.png"),
     "background": pygame.image.load("./assets/global/stardewPanorama.png"),
@@ -532,29 +533,29 @@ def mostrarBoard(gameData, running = True):
         if c[0] == gameData["playerAvatars"][1]:
             charAvis[1] = pygame.transform.scale_by(c[1], 4)
 
-    tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
-    screen.blit(tabuleiro, (0, 0), (0 , 0, 320*6, 180*6))
+    tabuleiro2 = pygame.transform.scale_by(assets["tabuleiro2"], 6)
+    screen.blit(tabuleiro2, (0, 0), (0 , 0, 320*6, 180*6))
 
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
-    screen.blit(cursors, (2, 702), (588 * 4 , 413 * 4, 320 * 4, 100 * 4))
+    screen.blit(cursors, (1370, 112), (588 * 4 , 413 * 4, 320 * 4, 100 * 4))
 
-    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
-    screen.blit(cursors, (1502, 702), (588 * 4 , 413 * 4, 320 * 4, 100 * 4))
+    #cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
+    #screen.blit(cursors, (1502, 702), (588 * 4 , 413 * 4, 320 * 4, 100 * 4))
 
-    screen.blit(charAvis[0], (82, 726), (0 , 0, 64 * 4, 64 * 4))
-    screen.blit(charAvis[1], (1582, 726), (0 , 0, 64 * 4, 64 * 4))
+    screen.blit(charAvis[0], (1450, 136), (0 , 0, 64 * 4, 64 * 4))
+    #screen.blit(charAvis[1], (1582, 726), (0 , 0, 64 * 4, 64 * 4))
 
     f = pygame.font.Font(assets["font"], 60)
     texto1 = f.render(gameData["playerNames"][0], False, (88, 12, 22))
     fw1, _ = f.size(gameData["playerNames"][0])
     tx1 = 210 - fw1 / 2
 
-    texto2 = f.render(gameData["playerNames"][1], False, (88, 12, 22))
-    fw2, _ = font.size(gameData["playerNames"][1])
-    tx2 = 1647 - fw2 / 2
+    #texto2 = f.render(gameData["playerNames"][1], False, (88, 12, 22))
+    #fw2, _ = font.size(gameData["playerNames"][1])
+    #tx2 = 1647 - fw2 / 2
 
     screen.blit(texto1, (tx1, 1008))
-    screen.blit(texto2, (tx2, 1008))
+    #screen.blit(texto2, (tx2, 1008))
 
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
 
@@ -572,7 +573,7 @@ def mostrarBoard(gameData, running = True):
 
     yy = 150
     for l in range(3):
-        xx = 432
+        xx = 186
         for c in range(4):
             bb[l][c] = boardButton((xx, yy), gameData["board"][l][c])
             bb[l][c].draw(screen)
