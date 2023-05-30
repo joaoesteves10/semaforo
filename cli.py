@@ -2,6 +2,7 @@ import sys, os
 from datetime import datetime
 from termcolor import colored
 import logicaSemaforo as s
+import time
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -9,10 +10,11 @@ def clear():
 def regras():
     clear()
     print("O objetivo deste jogo é ser o primeiro a conseguir uma linha de três peças da mesma cor na horizontal, vertical ou diagonal.")
-    print("O jogo realiza-se num tabuleiro, inicialmente vazio. Em cada jogada, cada jogador realiza uma das seguintes ações:")
+    print("O jogo realiza-se num tabuleiro, inicialmente vazio, de 3x4. Em cada jogada, cada jogador realiza uma das seguintes ações:")
     print("-> Colocar uma peça verde num quadrado vazio;")
     print("-> Substituir uma peça verde por uma peça amarela;")
     print("-> Substituir uma peça amarela por uma peça vermelha.")
+    print("-> Passar a vez.")
     print("É importante realçar que as peças vermelhas não podem ser substituídas, o que significa que à medida que o tabuleiro fica com peças vermelhas, é inevitável que surja uma linha de três peças.")
 
 def mainMenu():
@@ -24,12 +26,23 @@ def mainMenu():
     print("4: Sair da aplicação")
     escolha = int(input("\nEscolha uma opção: "))
     match escolha:
-        case 1: novoJogoPvP() # implementar PvB e BvB depois
-        case 2: carregarJogo() # ainda não implementado
+        case 1:
+            clear()
+            print("NOVO JOGO ----")
+            print("1: Jogador contra jogador")
+            print("2: Jogador contra computador")
+            escolha = int(input("\nEscolha uma opção: "))
+            match escolha:
+                case 1: novoJogoPvP()
+                case 2: novoJogoPvB()
+                case _:
+                    input("opção inválida, clique em qualquer tecla para voltar ao menu principal")
+                    mainMenu()
+        case 2: carregarJogo()
         case 3: regras()
         case 4: sys.exit()
         case _:
-            print("opção inválida")
+            input("opção inválida, clique em qualquer tecla para voltar ao menu principal")
             mainMenu()
 
 def printBoard(gameData):
@@ -54,6 +67,10 @@ def novoJogoPvP():
     player1 = input("Nome do " + colored("jogador 1", cores[0]) + ": ")
     player2 = input("Nome do " + colored("jogador 2", cores[1]) + ": ")
     gameData = s.initGameData(player1, player2)
+    gameLoop(gameData)
+
+def novoJogoPvB():
+    gameData = s.initGameData("player", "computador", gameType="bot")
     gameLoop(gameData)
 
 def carregarJogo():
@@ -93,7 +110,11 @@ def carregarJogo():
     games = s.loadGames()
     validGamesList = []
     for g in games:
-        print(f"Jogo {games.index(g)} iniciado em", datetime.utcfromtimestamp(g["startTime"]).strftime('%Y-%m-%d %H:%M:%S'))
+        if "gameType" not in g:
+            type = "local"
+        else:
+            type = g["gameType"]
+        print(f"Jogo {type} {games.index(g)} iniciado em", datetime.utcfromtimestamp(g["startTime"]).strftime('%Y-%m-%d %H:%M:%S'))
         print("Jogadores:", g["playerNames"][0], "contra", g["playerNames"][1])
         if g["ended"]:
             print("Jogo terminado em", datetime.utcfromtimestamp(g["history"][-1][3]).strftime('%Y-%m-%d %H:%M:%S'), "com vitória de", g["playerNames"][g["turn"]])
@@ -185,8 +206,14 @@ def gameLoop(gameData):
         clear()
         printLastPlay(gameData)
         printBoard(gameData)
-        while True:
+        if gameData["gameType"] == "bot":
+            if gameData["turn"] == 1:
+                print("O computador está a pensar...")
+                time.sleep(1)
+                s.botPlay(gameData)
+                continue
 
+        while True:
             play = input("Jogador " + colored(gameData["playerNames"][gameData["turn"]], cores[gameData["turn"]]) + " (linha, coluna / \"pass\" / \"sair\"): ")
 
             if play == "sair":

@@ -1,10 +1,11 @@
 ## módulo com a lógica para o jogo do semáforo
 import random, json, os, time
 
-def initGameData(player1, player2, avatar1=None, avatar2=None):
+def initGameData(player1, player2, avatar1=None, avatar2=None, gameType="local"):
     return {
         "startTime": time.time(), # timestamp do início do jogo, usado para display nos saves
         "ended": False, # se o jogo já acabou, usado para display nos saves
+        "gameType": gameType, # "local", "online", "bot"
         "playerNames": [player1, player2],
         "playerAvatars": [avatar1, avatar2], # será usado pela GUI, desnecessário para a lógica e CLI
         "turn": random.randint(0,1), # 0 = player1, 1 = player2
@@ -83,6 +84,23 @@ def play(gameData, play):
     gameData["history"].append((player, play, (beforeValue, afterValue), time.time()))
     return passarVez(gameData)
 
+def botPlay(gameData):
+    if gameData["turn"] == 1:
+        possiblePlays = ["11", "12", "13", "14",
+                         "21", "22", "23", "24",
+                         "31", "32", "33", "34",
+                         "pass"]
+        while True:
+            escolha = random.choice(possiblePlays)
+            if escolha == "pass":
+                play(gameData, escolha)
+                break
+            elif checkAvailablePieces(gameData, escolha):
+                play(gameData, escolha)
+                break
+            else:
+                continue
+
 def reverseLastPlay(gameData):
     if len(gameData["history"]) == 0:
         return gameData
@@ -130,3 +148,5 @@ def loadGames():
 def loadAutoSave():
     with open("autosave.json", "r") as saveFile:
         return json.load(saveFile)
+
+random.seed()
