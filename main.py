@@ -634,16 +634,16 @@ def mostrarBoard(gameData, running = True):
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
     screen.blit(cursors, (1370, 112), (588 * 4 , 413 * 4, 320 * 4, 100 * 4))
 
-    if gameData["turn"] == 1:
+    if gameData["turn"] == 0:
 
         screen.blit(charAvis[0], (1450, 136), (0, 0, 64 * 4, 64 * 4))
 
         f = pygame.font.Font(assets["font"], 60)
         texto1 = f.render(gameData["playerNames"][0], False, (88, 12, 22))
         fw1, _ = f.size(gameData["playerNames"][0])
-        tx1 = 210 - fw1 / 2
+        tx1 = 1564 - fw1 / 2
 
-        screen.blit(texto1, (tx1, 1008))
+        screen.blit(texto1, (tx1, 422))
 
     else:
         screen.blit(charAvis[1], (1450, 136), (0, 0, 64 * 4, 64 * 4))
@@ -651,9 +651,9 @@ def mostrarBoard(gameData, running = True):
         f = pygame.font.Font(assets["font"], 60)
         texto2 = f.render(gameData["playerNames"][1], False, (88, 12, 22))
         fw2, _ = font.size(gameData["playerNames"][1])
-        tx2 = 210 - fw2 / 2
+        tx2 = 1564 - fw2 / 2
 
-        screen.blit(texto2, (tx2, 1008))
+        screen.blit(texto2, (tx2, 422))
 
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
 
