@@ -26,7 +26,7 @@ assets = {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
         "skip": pygame.image.load("./assets/en/skip.png"),
         "save": pygame.image.load("./assets/en/Billboard.png"),
-        "cursors": pygame.image.load("./assets/en/Cursors.png"),
+        "cursorsGB": pygame.image.load("./assets/en/Cursors.png"),
         "tot1": pygame.image.load("./assets/en/tot1.png"),
         "tot2": pygame.image.load("./assets/en/tot2.png"),
         "tot3": pygame.image.load("./assets/en/tot3.png"),
@@ -37,6 +37,7 @@ assets = {
     "tabuleiro": pygame.image.load("./assets/global/tabuleiro.png"),
     "tabuleiro2": pygame.image.load("./assets/global/tabuleiro2.png"),
     "online": pygame.image.load("./assets/global/online.png"),
+    "cursors2": pygame.image.load("./assets/global/Cursors.png"),
     "logo": pygame.image.load("./assets/global/novalogo2.png"),
     "clouds": pygame.image.load("./assets/global/Clouds.png"),
     "background": pygame.image.load("./assets/global/stardewPanorama.png"),
@@ -721,7 +722,7 @@ def mostrarBoard(gameData, running = True):
                                 s.play(gameData, str(l) + str(c))
                                 print(gameData["board"])
                                 running = False
-
+        pygame.display.flip()
         clock.tick(FPS)
 
 def MenuOnline(gameData,running=True):
@@ -738,6 +739,27 @@ def MenuOnline(gameData,running=True):
                    (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
                    ))
     exit.draw(screen)
+
+    cursors = pygame.transform.scale_by(assets["cursors2"], 6)
+
+
+    Criar = Button((410, 700),  # posição
+                   (50 * 6, 31 * 6),  # tamanho
+                   (cursors, (461 * 6, 1875 * 6, 50 * 6, 31 * 6),  # imagem default
+                   ))
+    Criar.draw(screen)
+
+    Entrar = Button((810, 700),  # posição
+                   (50 * 6, 31 * 6),  # tamanho
+                   (cursors, (461 * 6, 1875 * 6, 50 * 6, 31 * 6),  # imagem default
+                   ))
+    Entrar.draw(screen)
+
+    Ver = Button((1210, 700),  # posição
+                   (50 * 6, 31 * 6),  # tamanho
+                   (cursors, (461 * 6, 1875 * 6, 50 * 6, 31 * 6),  # imagem default
+                   ))
+    Ver.draw(screen)
 
 
     clock = pygame.time.Clock()
