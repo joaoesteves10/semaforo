@@ -340,10 +340,9 @@ def menuPrincipal(running=True):
 
                     if boolValbot == 1:
                         if gameData["gameType"] == "bot" and gameData["turn"] == 1:
-                            s.botPlay(gameData)
-                            gameData["turn"] = 1
                             mostrarBoard(gameData, False)
-                            gameData["turn"] = 0
+                            pygame.display.flip()
+                            s.botPlay(gameData)
                             time.sleep(0.5)
 
                     mostrarBoard(gameData)
