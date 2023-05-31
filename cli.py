@@ -102,6 +102,7 @@ def playOnline():
                             time.sleep(0.5)
                         if gameData:
                             gameLoop(gameData, localPlayer=0)
+                            quit()
                     else:
                         print("Erro ao criar jogo:", response)
 
@@ -397,6 +398,8 @@ def gameLoop(gameData, localPlayer=0):
         printBoard(gameData)
     else:
         print("Jogo guardado com sucesso.")
+
+    quit()
 
 def replayGame(gameData):
     clear()

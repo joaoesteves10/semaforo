@@ -4,7 +4,6 @@ from websockets.sync.client import connect
 import logicaSemaforo as s
 import json
 
-
 def mkWebSocket(ip, port):
     try:
         with connect("ws://"+ip+":"+port) as websocket:
