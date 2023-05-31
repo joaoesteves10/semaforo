@@ -26,7 +26,7 @@ assets = {
         "buttons": pygame.image.load("./assets/en/TitleButtons.png"),
         "skip": pygame.image.load("./assets/en/skip.png"),
         "save": pygame.image.load("./assets/en/Billboard.png"),
-        "cursorsGB": pygame.image.load("./assets/en/Cursors.png"),
+        "cursors": pygame.image.load("./assets/en/Cursors.png"),
         "tot1": pygame.image.load("./assets/en/tot1.png"),
         "tot2": pygame.image.load("./assets/en/tot2.png"),
         "tot3": pygame.image.load("./assets/en/tot3.png"),
@@ -631,23 +631,26 @@ def mostrarBoard(gameData, running = True):
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
     screen.blit(cursors, (1370, 112), (588 * 4 , 413 * 4, 320 * 4, 100 * 4))
 
-    #cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
-    #screen.blit(cursors, (1502, 702), (588 * 4 , 413 * 4, 320 * 4, 100 * 4))
+    if gameData["turn"] == 1:
 
-    screen.blit(charAvis[0], (1450, 136), (0 , 0, 64 * 4, 64 * 4))
-    #screen.blit(charAvis[1], (1582, 726), (0 , 0, 64 * 4, 64 * 4))
+        screen.blit(charAvis[0], (1450, 136), (0, 0, 64 * 4, 64 * 4))
 
-    f = pygame.font.Font(assets["font"], 60)
-    texto1 = f.render(gameData["playerNames"][0], False, (88, 12, 22))
-    fw1, _ = f.size(gameData["playerNames"][0])
-    tx1 = 210 - fw1 / 2
+        f = pygame.font.Font(assets["font"], 60)
+        texto1 = f.render(gameData["playerNames"][0], False, (88, 12, 22))
+        fw1, _ = f.size(gameData["playerNames"][0])
+        tx1 = 210 - fw1 / 2
 
-    #texto2 = f.render(gameData["playerNames"][1], False, (88, 12, 22))
-    #fw2, _ = font.size(gameData["playerNames"][1])
-    #tx2 = 1647 - fw2 / 2
+        screen.blit(texto1, (tx1, 1008))
 
-    screen.blit(texto1, (tx1, 1008))
-    #screen.blit(texto2, (tx2, 1008))
+    else:
+        screen.blit(charAvis[1], (1450, 136), (0, 0, 64 * 4, 64 * 4))
+
+        f = pygame.font.Font(assets["font"], 60)
+        texto2 = f.render(gameData["playerNames"][1], False, (88, 12, 22))
+        fw2, _ = font.size(gameData["playerNames"][1])
+        tx2 = 210 - fw2 / 2
+
+        screen.blit(texto2, (tx2, 1008))
 
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
 
@@ -747,6 +750,12 @@ def MenuOnline(gameData,running=True):
                    ))
     Ver.draw(screen)
 
+    f = pygame.font.Font(assets["font"], 50)
+    renderTextCenteredAt(textos[lang]["online1"], f, (255, 215, 137), 940, 770, screen, 600)
+    renderTextCenteredAt(textos[lang]["online2"], f, (255, 215, 137), 1700, 770, screen, 600)
+    renderTextCenteredAt(textos[lang]["online3"], f, (255, 215, 137), 2480, 770, screen, 600)
+
+    pygame.display.flip()
 
     clock = pygame.time.Clock()
     while running:
@@ -760,7 +769,18 @@ def MenuOnline(gameData,running=True):
                 pygame.quit()
                 exit()
 
-        pygame.display.flip()
+            if Criar.is_clicked(ev):
+                pygame.quit()
+                exit()
+
+            if Entrar.is_clicked(ev):
+                pygame.quit()
+                exit()
+
+            if Ver.is_clicked(ev):
+                pygame.quit()
+                exit()
+
         clock.tick(FPS)
 def Tutorial(i=1, running=True):
     global lang
