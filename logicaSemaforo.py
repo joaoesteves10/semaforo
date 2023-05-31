@@ -90,22 +90,36 @@ def play(gameData, play):
     gameData["history"].append((player, play, (beforeValue, afterValue), time.time()))
     return passarVez(gameData)
 
+def findWinningPlay(gameData):
+
+    possiblePlays = ["11", "12", "13", "14",
+                     "21", "22", "23", "24",
+                     "31", "32", "33", "34"]
+
+    for p in possiblePlays:
+        if checkAvailablePieces(gameData, p) and gameData["board"][int(p[0])-1][int(p[1])-1] != 3:
+            testBoard = []
+            for bl in gameData["board"]:
+                testBoard.append(bl.copy())
+            testGameData = {
+                "board": testBoard,
+                "turn": gameData["turn"],
+                "history": [],
+                "ended": False,
+            }
+
+            testGameData = play(testGameData, p)
+
+            if checkWin(testGameData):
+                return p
+
+    return random.choice(possiblePlays)
+
+
 def botPlay(gameData):
     if gameData["turn"] == 1:
-        possiblePlays = ["11", "12", "13", "14",
-                         "21", "22", "23", "24",
-                         "31", "32", "33", "34",
-                         "pass"]
-        while True:
-            escolha = random.choice(possiblePlays)
-            if escolha == "pass":
-                play(gameData, escolha)
-                break
-            elif checkAvailablePieces(gameData, escolha):
-                play(gameData, escolha)
-                break
-            else:
-                continue
+        escolha = findWinningPlay(gameData)
+        play(gameData, escolha)
 
 def reverseLastPlay(gameData):
     if len(gameData["history"]) == 0:
