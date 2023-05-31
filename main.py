@@ -538,11 +538,11 @@ def NomePersonagem(running = True, char=0):
 
     avis = []
 
-    exit = Button((1884, -3),  # posição
+    exitB = Button((1884, -3),  # posição
                    (12 * 3, 12 * 3),  # tamanho
                    (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
                    ))
-    exit.draw(screen)
+    exitB.draw(screen)
 
     yy = 217
     cc = 0
@@ -570,7 +570,7 @@ def NomePersonagem(running = True, char=0):
                 pygame.quit()
                 exit()
 
-            if exit.is_clicked(ev):
+            if exitB.is_clicked(ev):
                 pygame.quit()
                 exit()
 
@@ -664,11 +664,11 @@ def mostrarBoard(gameData, running = True):
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
 
 
-    exit = Button((1884, -3),  # posição
+    exitB = Button((1884, -3),  # posição
                    (12 * 3, 12 * 3),  # tamanho
                    (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
                    ))
-    exit.draw(screen)
+    exitB.draw(screen)
 
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
     cropsP = [(208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
@@ -702,7 +702,7 @@ def mostrarBoard(gameData, running = True):
                 pygame.quit()
                 exit()
 
-            if exit.is_clicked(ev):
+            if exitB.is_clicked(ev):
                 pygame.quit()
                 exit()
 
@@ -734,11 +734,11 @@ def MenuOnline(gameData,running=True):
 
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
 
-    exit = Button((1884, -3),  # posição
+    exitB = Button((1884, -3),  # posição
                    (12 * 3, 12 * 3),  # tamanho
                    (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
                    ))
-    exit.draw(screen)
+    exitB.draw(screen)
 
     cursors = pygame.transform.scale_by(assets["cursors2"], 6)
 
@@ -770,7 +770,7 @@ def MenuOnline(gameData,running=True):
                 pygame.quit()
                 exit()
 
-            if exit.is_clicked(ev):
+            if exitB.is_clicked(ev):
                 pygame.quit()
                 exit()
 
@@ -787,11 +787,11 @@ def Tutorial(i=1, running=True):
                 )
     totB.draw(screen)
 
-    exit = Button((1884, -3),  # posição
+    exitB = Button((1884, -3),  # posição
                    (12 * 3, 12 * 3),  # tamanho
                    (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
                    ))
-    exit.draw(screen)
+    exitB.draw(screen)
 
     clock = pygame.time.Clock()
     while running:
@@ -801,7 +801,7 @@ def Tutorial(i=1, running=True):
                 pygame.quit()
                 exit()
 
-            if exit.is_clicked(ev):
+            if exitB.is_clicked(ev):
                 pygame.quit()
                 exit()
 
