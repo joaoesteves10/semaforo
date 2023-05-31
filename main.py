@@ -118,14 +118,6 @@ class boolButton(object):
 class boardButton(object):
     def __init__(self, position, piece):
 
-        """
-            buttonBoard[l][c] = Button((xx, yy),  # posição
-                   (40 * 6, 40 * 6),  # tamanho
-                   (tabuleiro, (534 * 6, 18 * 6, 40 * 6, 40 * 6)),  # imagem default
-                   )
-        self.image = image
-        """
-
         size = (40 * 6, 40 * 6)
         self.position = position
         self.tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
@@ -196,12 +188,8 @@ class characterSelectButton(object):
         if event.type == pygame.MOUSEMOTION and not noHover:
             if self.rect.collidepoint(event.pos):
                 screen.fill(0xfab05a, (1308, 132, 58 * 3.2 + 7, 58 * 3.2 + 7))
-                # como aqui não faz diferença (image_hover é sempre igual à imagem) e não estamos a usar
-                # nada hovered vamos comentar p/ evitar load desnecessário
                 # screen.blit(self.image_hover, self.rect, self.iconCoords)
                 screen.blit(self.imgScaled3, self.avatarPos, self.avatarCoords)
-            # mesma coisa, não estamos a usar nada hovered, não faz diferença
-            # else:
             #    screen.blit(self.imgScaled13, self.rect, self.iconCoords)
 
     def is_clicked(self, event, noHover=False):
@@ -670,8 +658,6 @@ def mostrarBoard(gameData, running = True):
                    ))
     exitB.draw(screen)
 
-    buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
-    cropsP = [(208 * 3.6, 518 * 3.6, 48 * 3.6, 53 * 3.6), (112 * 3.7, 525 * 3.7, 48 * 3.7, 53 * 3.7), (162 * 3.6, 518 * 3.6, 44 * 3.6, 53 * 3.6)]
 
     bb = [[None, None, None, None], [None, None, None, None], [None, None, None, None]]
 
