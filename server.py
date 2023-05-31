@@ -55,7 +55,7 @@ async def echo(websocket):
                 for e in games.values():
                     if e[2]:
 
-                        startTime = datetime.fromtimestamp(e[1]["startTime"])
+                        startTime = datetime.datetime.fromtimestamp(e[1]["startTime"])
                         now = datetime.now()
                         timeElapsed = now - startTime
 
