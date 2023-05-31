@@ -927,6 +927,44 @@ def MenuOnline(playername1, playeravatar1 ,running=True):
                     gameCode = response[1]
                 print(gameCode)
 
+                gameData = False
+                waiting = True
+                trycount = 10
+                while waiting and not gameData:
+                    waiting, gameData = o.waitForGame(gameCode, playername1, 0)
+                    if waiting == "gameExists, ONEPLAYER" and trycount == 10:
+                        print(gameCode + ": à espera de outro jogador...")
+                        trycount = 0
+                    trycount += 1
+                    if waiting == "Error":
+                        print("ERRO!")
+                    time.sleep(0.5)
+                if gameData:
+
+                    while not s.checkWin(gameData):
+                        if gameData["turn"] == 0:
+                            mostrarBoard(gameData)
+                        else:
+                            mostrarBoard(gameData, 0)
+                            pygame.screen.flip()
+
+                            t = 10
+                            rGameData = False
+                            while not rGameData:
+                                if t==10:
+                                    print("à espera da jogada adversária...")
+                                    t=0
+                                rGameData = o.getPlay(gameData)
+                                t+=1
+                                time.sleep(0.5)
+                            gameData = rGameData
+                            continue
+
+                        win(gameData)
+                    quit()
+
+
+
                 pygame.quit()
                 exit()
 
