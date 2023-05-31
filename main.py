@@ -342,8 +342,9 @@ def menuPrincipal(running=True):
                         if gameData["gameType"] == "bot" and gameData["turn"] == 1:
                             mostrarBoard(gameData, False)
                             pygame.display.flip()
-                            s.botPlay(gameData)
                             time.sleep(0.5)
+                            s.botPlay(gameData)
+                            continue
 
                     mostrarBoard(gameData)
                 win(gameData)
