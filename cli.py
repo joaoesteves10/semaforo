@@ -337,7 +337,8 @@ def gameLoop(gameData, localPlayer=0):
                 continue
 
         while True:
-            play = input("Jogador " + colored(gameData["playerNames"][gameData["turn"]], cores[gameData["turn"]]) + " (linha, coluna / \"pass\" / \"sair\"): ")
+            play = input("Jogador " + colored(gameData["playerNames"][gameData["turn"]], cores[gameData["turn"]]) +
+                          " (linha, coluna / \"pass\" / \"sair\"): ")
 
             if play == "sair":
                 s.saveGame(gameData)
