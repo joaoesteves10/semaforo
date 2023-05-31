@@ -6,6 +6,7 @@ import json
 ctypes.windll.user32.SetProcessDPIAware()
 pygame.font.init()
 boolValonline = 0
+boolValbot = 0
 
 
 assets = {
@@ -35,6 +36,7 @@ assets = {
     },
     "tabuleiro": pygame.image.load("./assets/global/tabuleiro.png"),
     "tabuleiro2": pygame.image.load("./assets/global/tabuleiro2.png"),
+    "online": pygame.image.load("./assets/global/online.png"),
     "logo": pygame.image.load("./assets/global/novalogo2.png"),
     "clouds": pygame.image.load("./assets/global/Clouds.png"),
     "background": pygame.image.load("./assets/global/stardewPanorama.png"),
@@ -339,6 +341,9 @@ def menuPrincipal(running=True):
                     if boolValonline == 0:
                        mostrarBoard(gameData)
 
+                    if boolValonline == 1:
+                       MenuOnline(gameData)
+
                 menuPrincipal(False)
 
             if loadGameButton.is_clicked(ev):
@@ -475,9 +480,6 @@ characters = importCharacters()
 def NomePersonagem(running = True, char=0):
     global boolValbot
     global boolValonline
-
-    boolValbot = 0
-    boolValonline = 0
 
     global lang
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
@@ -720,9 +722,38 @@ def mostrarBoard(gameData, running = True):
                                 print(gameData["board"])
                                 running = False
 
-        pygame.display.flip()
         clock.tick(FPS)
 
+def MenuOnline(gameData,running=True):
+
+    online = pygame.transform.scale_by(assets["online"], 3)
+    screen.blit(online, (0, 0), (0, 0, 640*3, 360*3))
+    pygame.display.flip()
+
+
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+
+    exit = Button((1884, -3),  # posição
+                   (12 * 3, 12 * 3),  # tamanho
+                   (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
+                   ))
+    exit.draw(screen)
+
+
+    clock = pygame.time.Clock()
+    while running:
+        for ev in pygame.event.get():
+
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if exit.is_clicked(ev):
+                pygame.quit()
+                exit()
+
+        pygame.display.flip()
+        clock.tick(FPS)
 def Tutorial(i=1, running=True):
     global lang
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
