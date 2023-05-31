@@ -343,6 +343,7 @@ def menuPrincipal(running=True):
                             mostrarBoard(gameData, False)
                             gameData["turn"] = 0
                             time.sleep(0.5)
+                win(gameData)
 
             if loadGameButton.is_clicked(ev):
                 saves()
@@ -905,7 +906,10 @@ def Tutorial(i=1, running=True):
         pygame.display.flip()
         clock.tick(FPS)
 
-def win(running = True):
+def win(gameData, running = True):
+    winner = gameData["history"][-1][0]
+    winnerName = gameData["playerNames"][winner]
+    winnerAvatar = gameData["playerAvatars"][winner]
     global lang
     win = pygame.transform.scale_by(assets["win"], 4.5)
     screen.blit(win, (0, 0), (0, 0, 337*4.5, 197*4.5))
