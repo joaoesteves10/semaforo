@@ -5,6 +5,8 @@ import os
 import json
 ctypes.windll.user32.SetProcessDPIAware()
 pygame.font.init()
+boolValonline = 0
+
 
 assets = {
     "pt": {
@@ -251,6 +253,8 @@ def toggleMusic():
 
 def menuPrincipal(running=True):
     global lang
+    global boolValbot
+    global boolValonline
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
 
     bgImage = pygame.transform.scale_by(assets["background"], 3*(2147/1920))
@@ -331,7 +335,9 @@ def menuPrincipal(running=True):
                 print(gameData)
                 while not s.checkWin(gameData):
                     s.autoSave(gameData)
-                    mostrarBoard(gameData)
+
+                    if boolValonline == 0:
+                       mostrarBoard(gameData)
 
                 menuPrincipal(False)
 
@@ -467,7 +473,12 @@ def importCharacters():
 characters = importCharacters()
 
 def NomePersonagem(running = True, char=0):
-    boolVal = 0
+    global boolValbot
+    global boolValonline
+
+    boolValbot = 0
+    boolValonline = 0
+
     global lang
     tabuleiro = pygame.transform.scale_by(assets["tabuleiro"], 6)
     screen.blit(tabuleiro, (0, 0), (320 * 6, 0, 320*6, 180*6))
@@ -484,28 +495,43 @@ def NomePersonagem(running = True, char=0):
     active = False
     text = ''
 
-    ok = Button((1330, 430),  # posição
+    ok = Button((1330, 380),  # posição
                    (65 * 2*(2147/1920), 65 * 2*(2147/1920)),  # tamanho
                    (cursors, (127 * 2*(2147/1920), 255 * 2*(2147/1920), 65 * 2*(2147/1920), 65 * 2*(2147/1920))),  # imagem default
                    (cursors, (127 * 2*(2147/1920), 255 * 2*(2147/1920), 65 * 2*(2147/1920), 65 * 2*(2147/1920))),
                    )
     ok.draw(screen)
 
-    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
 
     if (char ==1):
         renderTextCenteredAt(textos[lang]["player2"], font,(86,22,12),2550,725,screen,600)
-        bot = boolButton((1300, 600),
-                   (9 * 3, 9 * 3),
+
+        renderTextCenteredAt("Bot", font,(86,22,12),2800,568,screen,600)
+        bot = boolButton((1360, 580),
+                   (9 * 4, 9 * 4),
                    (cursors),
-                   (236 * 3, 425 * 3, 9 * 3, 9 * 3),
-                   (227 * 3, 425 * 3, 9 * 3, 9 * 3),
+                   (236 * 4, 425 * 4, 9 * 4, 9 * 4),
+                   (227 * 4, 425 * 4, 9 * 4, 9 * 4),
                    "0xfadc97"
                    )
-        bot.draw(screen, boolVal)
+        bot.draw(screen, boolValbot)
 
     else:
         renderTextCenteredAt(textos[lang]["player1"], font,(86,22,12),2550,725,screen,600)
+
+        renderTextCenteredAt("Online", font,(86,22,12),2700,568,screen,600)
+        online = boolButton((1310, 580),
+                   (9 * 4, 9 * 4),
+                   (cursors),
+                   (236 * 4, 425 * 4, 9 * 4, 9 * 4),
+                   (227 * 4, 425 * 4, 9 * 4, 9 * 4),
+                   "0xfadc97"
+                   )
+        online.draw(screen, boolValbot)
+
+
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
 
     avis = []
 
@@ -547,11 +573,19 @@ def NomePersonagem(running = True, char=0):
 
             if (char == 1):
                 if bot.is_clicked(ev):
-                    if boolVal == 1:
-                        boolVal = 0
+                    if boolValbot == 1:
+                        boolValbot = 0
                     else:
-                        boolVal = 1
-                    bot.draw(screen, boolVal)
+                        boolValbot = 1
+                    bot.draw(screen, boolValbot)
+
+            if (char == 0):
+                if online.is_clicked(ev):
+                    if boolValonline == 1:
+                        boolValonline = 0
+                    else:
+                        boolValonline = 1
+                    online.draw(screen, boolValonline)
 
             if ok.is_clicked(ev):
                 return text, clicked
