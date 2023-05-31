@@ -81,6 +81,10 @@ def play(gameData, play):
         return passarVez(gameData)
 
     beforeValue = gameData["board"][int(play[0])-1][int(play[1])-1]
+
+    if (not checkAvailablePieces(gameData, play)) or beforeValue == 3:
+        return gameData
+
     gameData["board"][int(play[0])-1][int(play[1])-1] += 1
     afterValue = gameData["board"][int(play[0])-1][int(play[1])-1]
     gameData["history"].append((player, play, (beforeValue, afterValue), time.time()))

@@ -382,7 +382,7 @@ def gameLoop(gameData, localPlayer=0):
             else:
                 print("jogada inválida")
 
-    s.passarVez(gameData) # para voltar ao jogador que ganhou
+    s.passarVez(gameData)
     if inGame:
         s.saveGame(gameData)
         clear()
