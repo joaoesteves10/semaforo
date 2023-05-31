@@ -481,6 +481,12 @@ def Metercodigo(player1name, player1avatar, running = True):
                    ))
     exitB.draw(screen)
 
+    input_box = pygame.Rect(1000, 600, 500, 200)
+    color_inactive = pygame.Color((86,22,12))
+    color_active = pygame.Color((86,22,12))
+    color = color_inactive
+    active = False
+    text = ''
 
     clock = pygame.time.Clock()
 
@@ -498,6 +504,25 @@ def Metercodigo(player1name, player1avatar, running = True):
             if buttonback.is_clicked(ev):
                 running = False
 
+
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(ev.pos):
+                    active = not active
+                else:
+                    active = False
+                color = color_active if active else color_inactive
+            if ev.type == pygame.KEYDOWN:
+                if active:
+                    if ev.key == pygame.K_RETURN:
+                        print(text)
+                        text = ''
+                    elif ev.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        text += ev.unicode
+
+        txt_surface = font.render(text, False, color)
+        screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -954,13 +979,39 @@ def win(gameData, running = True):
     winner = gameData["history"][-1][0]
     winnerName = gameData["playerNames"][winner]
     winnerAvatar = gameData["playerAvatars"][winner]
-
     global lang
-    print (screen)
-    screen.fill(0xf6d992, (0, 0, 1920, 1080))
 
-    font = pygame.font.Font(assets["font"], 30)
-    renderTextCenteredAt("Winner: "+winnerName, font,(86,22,12),960,540,screen,600)
+    for c in characters:
+        if c[0] == gameData["playerAvatars"][0]:
+            winnerAvatar[0] = pygame.transform.scale_by(c[1], 4)
+
+
+    bgImage = pygame.transform.scale_by(assets["background"], 3*(2147/1920))
+    screen.blit(bgImage, (0, -250))
+
+    clouds = pygame.transform.scale_by(assets["clouds"], 2*(2147/1920))
+    screen.blit(clouds, (100, 200), (0*2*(2147/1920), 470*2*(2147/1920) , 150*2*(2147/1920), 80*2*(2147/1920)))
+    screen.blit(clouds, (1700, 200), (150*2*(2147/1920), 430*2*(2147/1920) , 150*2*(2147/1920), 80*2*(2147/1920)))
+    screen.blit(clouds, (1450, 400), (400*2*(2147/1920), 465*2*(2147/1920) , 140*2*(2147/1920), 70*2*(2147/1920)))
+
+    win = pygame.transform.scale_by(assets["win"], 3)
+    screen.blit(win, (192, 100), (0, 0, 512*3, 288*3))
+
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
+    screen.blit(cursors, (754, 350), (588 * 4 , 413 * 4, 103 * 4, 100 * 4))
+
+    screen.blit(winnerAvatar[0], (1450, 136), (0, 0, 64 * 4, 64 * 4))
+
+    font = pygame.font.Font(assets["font"], 40)
+    renderTextCenteredAt("Winner: "+winnerName, font,(86,22,12),1600,665,screen,600)
+
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+
+    exitB = Button((1884, -3),  # posição
+                   (12 * 3, 12 * 3),  # tamanho
+                   (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
+                   ))
+    exitB.draw(screen)
 
     clock = pygame.time.Clock()
     while running:
@@ -969,6 +1020,11 @@ def win(gameData, running = True):
             if ev.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+
+            if exitB.is_clicked(ev):
+                pygame.quit()
+                exit()
+
 
         pygame.display.flip()
         clock.tick(FPS)
