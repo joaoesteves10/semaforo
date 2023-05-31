@@ -410,6 +410,9 @@ def saves(running = True):
     )
     save3B.draw(screen)
 
+    renderTextCenteredAt("Save 1", font, (86, 22, 12), 1300, 450, screen, 600)
+    renderTextCenteredAt("Save 2", font, (86, 22, 12), 1850, 340, screen, 600)
+    renderTextCenteredAt("Save 3", font, (86, 22, 12), 2470, 530, screen, 600)
 
     buttonback = Button((1755, 1005),  # posição
                    (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
@@ -421,6 +424,7 @@ def saves(running = True):
     muteButton.draw(screen)
 
     clock = pygame.time.Clock()
+    pygame.display.flip()
 
     while running:
         for ev in pygame.event.get():
@@ -457,7 +461,6 @@ def saves(running = True):
             if buttonback.is_clicked(ev):
                 running = False
 
-        pygame.display.flip()
         clock.tick(FPS)
 
 def Metercodigo(player1name, player1avatar, running = True):
@@ -833,7 +836,7 @@ def mostrarBoard(gameData, running = True):
         texto += (gameData["playerNames"][play[0]] + ": " + play[1] + "\n")
 
     f = pygame.font.Font(assets["font"], 40)
-    renderTextCenteredAt(texto, f, (88, 12, 22), 3000, 570, screen, 600)
+    renderTextCenteredAt(texto, f, (88, 12, 22), 2925, 570, screen, 600)
 
     clock = pygame.time.Clock()
 
