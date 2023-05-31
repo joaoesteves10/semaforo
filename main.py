@@ -827,6 +827,13 @@ def mostrarBoard(gameData, running = True):
                    )
     skip.draw(screen)
 
+    last15plays = gameData["history"][-15:]
+    texto = ""
+    for play in last15plays:
+        texto += (gameData["playerNames"][play[0]] + " jogou " + play[1] + "\n")
+
+    f = pygame.font.Font(assets["font"], 30)
+    renderTextCenteredAt(texto, f, (88, 12, 22), 1564, 600, screen, 600)
 
     clock = pygame.time.Clock()
 
