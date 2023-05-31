@@ -947,11 +947,13 @@ def win(gameData, running = True):
     winner = gameData["history"][-1][0]
     winnerName = gameData["playerNames"][winner]
     winnerAvatar = gameData["playerAvatars"][winner]
+
     global lang
-    win = pygame.transform.scale_by(assets["win"], 4.5)
-    screen.blit(win, (0, 0), (0, 0, 337*4.5, 197*4.5))
+    print (screen)
+    screen.fill(0xf6d992, (0, 0, 1920, 1080))
+
     font = pygame.font.Font(assets["font"], 30)
-    renderTextCenteredAt(textos[lang]["creditos"], font,(86,22,12),2040,240,screen,600)
+    renderTextCenteredAt("Winner: "+winnerName, font,(86,22,12),960,540,screen,600)
 
     clock = pygame.time.Clock()
     while running:
