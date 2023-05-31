@@ -3,7 +3,10 @@ import logicaSemaforo as s
 import ctypes
 import os
 import json
+
 ctypes.windll.user32.SetProcessDPIAware()
+
+
 pygame.font.init()
 boolValonline = 0
 boolValbot = 0
@@ -208,7 +211,7 @@ pygame.init()
 lang = "pt"
 FPS = 144
 
-screen = pygame.display.set_mode((1920, 1080)) ## tentar resolver problema das outras resoluções depois
+screen = pygame.display.set_mode((1920, 1080))
 pygame.display.set_caption("Semáforo")
 pygame_icon = assets["logo"]
 pygame.display.set_icon(pygame_icon)
@@ -782,6 +785,7 @@ def MenuOnline(gameData,running=True):
                 exit()
 
         clock.tick(FPS)
+
 def Tutorial(i=1, running=True):
     global lang
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
