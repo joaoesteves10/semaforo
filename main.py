@@ -824,8 +824,8 @@ def mostrarBoard(gameData, running = True):
                 exit()
 
             if skip.is_clicked(ev):
-                pygame.quit()
-                exit()
+                s.play(gameData, "pass")
+                running = False
 
             for linha in bb:
                 for b in linha:
