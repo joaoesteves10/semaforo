@@ -361,8 +361,27 @@ def saves(running = True):
     screen.blit(soBoard, (202, 100), (0, 0, 337*4.5, 197*4.5))
 
 
-
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 5)
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+
+    save1 = Button((575, 380), # posição
+                        (48 * 5, 67 * 5), # tamanho
+                        (cursors, (511 * 5, 398 * 5, 48 * 5, 67 * 5)), # imagem default
+    )
+    save1.draw(screen)
+
+    save2 = Button((850, 270), # posição
+                        (48 * 5, 67 * 5), # tamanho
+                        (cursors, (511 * 5, 398 * 5, 48 * 5, 67 * 5)), # imagem default
+    )
+    save2.draw(screen)
+
+    save3 = Button((1125, 460), # posição
+                        (48 * 5, 67 * 5), # tamanho
+                        (cursors, (511 * 5, 398 * 5, 48 * 5, 67 * 5)), # imagem default
+    )
+    save3.draw(screen)
+
 
     buttonback = Button((1755, 1005),  # posição
                    (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
@@ -381,6 +400,15 @@ def saves(running = True):
             if ev.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+
+            if save1.is_clicked(ev):
+                continue
+
+            if save2.is_clicked(ev):
+                continue
+
+            if save3.is_clicked(ev):
+                continue
 
             if muteButton.is_clicked(ev):
                 toggleMusic()
