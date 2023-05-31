@@ -422,6 +422,86 @@ def saves(running = True):
         pygame.display.flip()
         clock.tick(FPS)
 
+def Metercodigo(running = True):
+    global lang
+    soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 5)
+    screen.blit(soBoard, (592, 0), (513*5, 13*5, 147*5, 175*5))
+    buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+
+    buttonback = Button((1755, 1005),  # posição
+                   (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920), 66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),  # imagem default
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920)+27 * 2.5*(2147/1920),66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),
+                   )
+    buttonback.draw(screen)
+
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+
+    exitB = Button((1884, -3),  # posição
+                   (12 * 3, 12 * 3),  # tamanho
+                   (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
+                   ))
+    exitB.draw(screen)
+
+
+    clock = pygame.time.Clock()
+
+    while running:
+        for ev in pygame.event.get():
+
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if exitB.is_clicked(ev):
+                pygame.quit()
+                exit()
+
+            if buttonback.is_clicked(ev):
+                running = False
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+def EncontarJogo(running = True):
+    global lang
+    soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 5)
+    screen.blit(soBoard, (592, 0), (352*5, 14*5, 147*5, 168*5))
+    buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
+
+    buttonback = Button((1755, 1005),  # posição
+                   (66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920)),  # tamanho
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920), 66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),  # imagem default
+                   (buttons, (296 * 2.5*(2147/1920), 252 * 2.5*(2147/1920)+27 * 2.5*(2147/1920),66 * 2.5*(2147/1920), 27 * 2.5*(2147/1920))),
+                   )
+    buttonback.draw(screen)
+
+    cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
+
+    exitB = Button((1884, -3),  # posição
+                   (12 * 3, 12 * 3),  # tamanho
+                   (cursors, (337 * 3, 493 * 3, 12 * 3, 12 * 3),  # imagem default
+                   ))
+    exitB.draw(screen)
+
+    clock = pygame.time.Clock()
+
+    while running:
+        for ev in pygame.event.get():
+
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+            if exitB.is_clicked(ev):
+                pygame.quit()
+                exit()
+
+            if buttonback.is_clicked(ev):
+                running = False
+
+        pygame.display.flip()
+        clock.tick(FPS)
 def SettingseCredits(running = True):
     global lang
     soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 4.5)
@@ -721,8 +801,6 @@ def MenuOnline(gameData,running=True):
 
     online = pygame.transform.scale_by(assets["online"], 3)
     screen.blit(online, (0, 0), (0, 0, 640*3, 360*3))
-    pygame.display.flip()
-
 
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 3)
 
@@ -777,12 +855,12 @@ def MenuOnline(gameData,running=True):
                 exit()
 
             if Entrar.is_clicked(ev):
-                pygame.quit()
-                exit()
+                Metercodigo()
+                MenuOnline(False)
 
             if Ver.is_clicked(ev):
-                pygame.quit()
-                exit()
+                EncontarJogo()
+                MenuOnline(False)
 
         clock.tick(FPS)
 
