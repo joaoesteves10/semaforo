@@ -347,6 +347,17 @@ def gameLoop(gameData, localPlayer=0):
 
             if play == "pass":
                 s.play(gameData, play)
+
+                if gameData["gameType"] == "online":
+                    send = o.sendPlay(localPlayer, play, gameData)
+                    if send == "ok":
+                        print("jogada enviada com sucesso, continuando")
+                        break
+                    else:
+                        print("erro ao enviar jogada")
+                        print(send)
+                        exit()
+
                 break
 
             elif len(play) == 2 and play[0] in "123" and play[1] in "1234":
