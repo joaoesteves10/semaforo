@@ -3,6 +3,7 @@ import logicaSemaforo as s
 import ctypes
 import os
 import json
+import onlinePlay as o
 
 ctypes.windll.user32.SetProcessDPIAware()
 
@@ -326,7 +327,7 @@ def menuPrincipal(running=True):
             if newGameButton.is_clicked(ev):
                 player0name, player0avatar = NomePersonagem(1, 0)
                 if boolValonline == 1:
-                    MenuOnline(gameData)
+                    MenuOnline(player0name, player0avatar)
                 player1name, player1avatar = NomePersonagem(1, 1)
                 if boolValbot == 1:
                     gameData = s.initGameData(player0name, "Bot", player0avatar, "Krobus", "bot")
@@ -429,7 +430,7 @@ def saves(running = True):
         pygame.display.flip()
         clock.tick(FPS)
 
-def Metercodigo(running = True):
+def Metercodigo(player1name, player1avatar, running = True):
     global lang
     soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 5)
     screen.blit(soBoard, (592, 0), (513*5, 13*5, 147*5, 175*5))
@@ -470,7 +471,7 @@ def Metercodigo(running = True):
         pygame.display.flip()
         clock.tick(FPS)
 
-def EncontarJogo(running = True):
+def EncontarJogo(playername, playeravatar, running = True):
     global lang
     soBoard = pygame.transform.scale_by(assets["specialOrdersBoard"], 5)
     screen.blit(soBoard, (592, 0), (352*5, 14*5, 147*5, 168*5))
@@ -804,7 +805,7 @@ def mostrarBoard(gameData, running = True):
         pygame.display.flip()
         clock.tick(FPS)
 
-def MenuOnline(gameData,running=True):
+def MenuOnline(playername1, playeravatar1 ,running=True):
 
     online = pygame.transform.scale_by(assets["online"], 3)
     screen.blit(online, (0, 0), (0, 0, 640*3, 360*3))
@@ -858,15 +859,21 @@ def MenuOnline(gameData,running=True):
                 exit()
 
             if Criar.is_clicked(ev):
+                public = 0
+                response = o.newGame(playername1, playeravatar1, public)
+                if response[0] == "newGameCreated":
+                    gameCode = response[1]
+                print(gameCode)
+
                 pygame.quit()
                 exit()
 
             if Entrar.is_clicked(ev):
-                Metercodigo()
+                Metercodigo(playername1, playeravatar1)
                 MenuOnline(False)
 
             if Ver.is_clicked(ev):
-                EncontarJogo()
+                EncontarJogo(playername1, playeravatar1)
                 MenuOnline(False)
 
         clock.tick(FPS)
