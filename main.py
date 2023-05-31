@@ -40,6 +40,7 @@ assets = {
     "tabuleiro": pygame.image.load("./assets/global/tabuleiro.png"),
     "tabuleiro2": pygame.image.load("./assets/global/tabuleiro2.png"),
     "online": pygame.image.load("./assets/global/online.png"),
+    "win": pygame.image.load("./assets/global/win.png"),
     "cursors2": pygame.image.load("./assets/global/Cursors.png"),
     "logo": pygame.image.load("./assets/global/novalogo2.png"),
     "clouds": pygame.image.load("./assets/global/Clouds.png"),
@@ -324,19 +325,24 @@ def menuPrincipal(running=True):
 
             if newGameButton.is_clicked(ev):
                 player0name, player0avatar = NomePersonagem(1, 0)
+                if boolValonline == 1:
+                    MenuOnline(gameData)
                 player1name, player1avatar = NomePersonagem(1, 1)
-                gameData = s.initGameData(player0name, player1name, player0avatar, player1avatar)
+                if boolValbot == 1:
+                    gameData = s.initGameData(player0name, "Bot", player0avatar, "Krobus", "bot")
+                else:
+                    gameData = s.initGameData(player0name, player1name, player0avatar, player1avatar)
                 print(gameData)
                 while not s.checkWin(gameData):
                     s.autoSave(gameData)
 
-                    if boolValonline == 0:
-                       mostrarBoard(gameData)
-
-                    if boolValonline == 1:
-                       MenuOnline(gameData)
-
-                menuPrincipal(False)
+                    if boolValbot == 1:
+                        if gameData["gameType"] == "bot" and gameData["turn"] == 1:
+                            s.botPlay(gameData)
+                            gameData["turn"] = 1
+                            mostrarBoard(gameData, False)
+                            gameData["turn"] = 0
+                            time.sleep(0.5)
 
             if loadGameButton.is_clicked(ev):
                 saves()
@@ -899,6 +905,24 @@ def Tutorial(i=1, running=True):
         pygame.display.flip()
         clock.tick(FPS)
 
+def win(running = True):
+    global lang
+    win = pygame.transform.scale_by(assets["win"], 4.5)
+    screen.blit(win, (0, 0), (0, 0, 337*4.5, 197*4.5))
+    font = pygame.font.Font(assets["font"], 30)
+    renderTextCenteredAt(textos[lang]["creditos"], font,(86,22,12),2040,240,screen,600)
+
+    clock = pygame.time.Clock()
+    while running:
+        for ev in pygame.event.get():
+
+            if ev.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
 def renderTextCenteredAt(text, font, colour, x, y, screen, allowed_width):
     # first, split the text into words
     words = []
@@ -941,17 +965,11 @@ def renderTextCenteredAt(text, font, colour, x, y, screen, allowed_width):
         if not found:
             break
 
-    # now we've split our text into lines that fit into the width, actually
-    # render them
 
-    # we'll render each line below the last, so we need to keep track of
-    # the culmative height of the lines we've rendered so far
     y_offset = 0
     for line in lines:
         fw, fh = font.size(line)
 
-        # (tx, ty) is the top-left of the font surface
-        # tx = x - fw / 2
         tx = x-x/2
         ty = y + y_offset
 
