@@ -1000,7 +1000,7 @@ def win(gameData, running = True):
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 4)
     screen.blit(cursors, (754, 350), (588 * 4 , 413 * 4, 103 * 4, 100 * 4))
 
-    screen.blit(winnerAvatarIMG, (1450, 136), (0, 0, 64 * 4, 64 * 4))
+    screen.blit(winnerAvatarIMG, (833, 375), (0, 0, 64 * 4, 64 * 4))
 
     font = pygame.font.Font(assets["font"], 40)
     renderTextCenteredAt("Winner: "+winnerName, font,(86,22,12),1600,665,screen,600)
