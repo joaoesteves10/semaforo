@@ -155,6 +155,9 @@ def playOnline():
                     else:
                         print("Não foram encontrados jogos públicos.")
 
+                case "4":
+                    break
+
 
 def printBoard(gameData):
     print("  1 | 2 | 3 | 4 |")
@@ -197,7 +200,8 @@ def carregarJogo():
             print(f"Jogo autosave iniciado em {datetime.utcfromtimestamp(autosaved['startTime']).strftime('%Y-%m-%d %H:%M:%S')}")
             print("Jogadores:", autosaved["playerNames"][0], "contra", autosaved["playerNames"][1])
             if autosaved["ended"]:
-                print("Jogo terminado em", datetime.utcfromtimestamp(autosaved["history"][-1][3]).strftime('%Y-%m-%d %H:%M:%S'), "com vitória de", autosaved["playerNames"][autosaved["turn"]])
+                print("Jogo terminado em", datetime.utcfromtimestamp(autosaved["history"][-1][3]).strftime('%Y-%m-%d %H:%M:%S'),
+                      "com vitória de", autosaved["playerNames"][autosaved["turn"]])
             else:
                 print("Jogo em curso, é a vez de", autosaved["playerNames"][autosaved["turn"]])
             printBoard(autosaved)
@@ -206,7 +210,7 @@ def carregarJogo():
             print("Erro ao carregar o jogo guardado automaticamente; listanado jogos guardados manualmente.")
             continuar = "n"
 
-        while valid and (continuar.lower() not in ["s", "n"]):
+        while valid and (continuar.lower() not in ["s", "n"]) and autosaved["gameType"] != "online":
             continuar = input("Deseja continuar este jogo? [s/n]: ")
 
             if continuar.lower() == "s":
@@ -262,6 +266,9 @@ def carregarJogo():
                 else:
                     print("Escolha inválida!")
 
+        elif games[escolha]["gameType"] == "online":
+            print("Este jogo é online, não pode ser retomado.")
+            return
         else:
             gameLoop(games[escolha])
             return
@@ -419,7 +426,6 @@ def replayGame(gameData):
                     if avancar == "":
                         playCount += 1
                         s.play(replay, gameData["history"][playCount][1])
-                        s.passarVez(replay)
                         continue
                     elif avancar == "-1":
                         return
@@ -431,8 +437,7 @@ def replayGame(gameData):
 
             replay["turn"] = (replay["turn"] + 1) % 2 # para voltar ao jogador que ganhou
             clear()
-            printPlay(replay, -1)
-            print("Fim do jogo")
+            printLastPlay(replay)
             printBoard(replay)
             print(replay["playerNames"][replay["turn"]], "ganhou!")
         elif escolha.lower() == "n":

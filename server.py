@@ -3,6 +3,7 @@ from websockets.server import serve
 import json
 import logicaSemaforo as s
 import random, string
+import datetime
 
 games = {}
 
@@ -53,8 +54,14 @@ async def echo(websocket):
                 acum = []
                 for e in games.values():
                     if e[2]:
-                        if not e[1]["ended"] and len(e[0]) == 1:
+
+                        startTime = datetime.fromtimestamp(e[1]["startTime"])
+                        now = datetime.now()
+                        timeElapsed = now - startTime
+
+                        if not e[1]["ended"] and len(e[0]) == 1 and e[1] and timeElapsed < datetime.timedelta(minutes=5):
                             acum.append(e)
+
                 if acum == []:
                     jsonS = json.dumps(("noOpenGames", None))
                 else:
