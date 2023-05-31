@@ -830,7 +830,7 @@ def mostrarBoard(gameData, running = True):
     last15plays = gameData["history"][-11:]
     texto = ""
     for play in last15plays:
-        texto += (gameData["playerNames"][play[0]] + " jogou " + play[1] + "\n")
+        texto += (gameData["playerNames"][play[0]] + ": " + play[1] + "\n")
 
     f = pygame.font.Font(assets["font"], 40)
     renderTextCenteredAt(texto, f, (88, 12, 22), 3000, 570, screen, 600)
