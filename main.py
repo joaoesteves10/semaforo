@@ -4,6 +4,7 @@ import ctypes
 import os
 import json
 import onlinePlay as o
+import time
 
 ctypes.windll.user32.SetProcessDPIAware()
 
@@ -344,6 +345,8 @@ def menuPrincipal(running=True):
                             mostrarBoard(gameData, False)
                             gameData["turn"] = 0
                             time.sleep(0.5)
+
+                    mostrarBoard(gameData)
                 win(gameData)
 
             if loadGameButton.is_clicked(ev):
@@ -375,23 +378,37 @@ def saves(running = True):
     cursors = pygame.transform.scale_by(assets[lang]["cursors"], 5)
     buttons = pygame.transform.scale_by(assets[lang]["buttons"], 2.5*(2147/1920))
 
-    save1 = Button((575, 380), # posição
-                        (48 * 5, 67 * 5), # tamanho
-                        (cursors, (511 * 5, 398 * 5, 48 * 5, 67 * 5)), # imagem default
-    )
-    save1.draw(screen)
+    saves = s.loadGames()
 
-    save2 = Button((850, 270), # posição
-                        (48 * 5, 67 * 5), # tamanho
-                        (cursors, (511 * 5, 398 * 5, 48 * 5, 67 * 5)), # imagem default
-    )
-    save2.draw(screen)
+    if os.path.exists("autosave.json"):
+        save1 = s.loadAutoSave()
+        save2 = saves[-1] if len(saves) >= 1 else None
+        save3 = saves[-2] if len(saves) >= 2 else None
+    else:
+        if len(saves) >= 1:
+            save1 = saves[-1]
+        if len(saves) >= 2:
+            save2 = saves[-2]
+        if len(saves) >= 3:
+            save3 = saves[-3]
 
-    save3 = Button((1125, 460), # posição
+    save1B = Button((575, 380), # posição
                         (48 * 5, 67 * 5), # tamanho
                         (cursors, (511 * 5, 398 * 5, 48 * 5, 67 * 5)), # imagem default
     )
-    save3.draw(screen)
+    save1B.draw(screen)
+
+    save2B = Button((850, 270), # posição
+                        (48 * 5, 67 * 5), # tamanho
+                        (cursors, (511 * 5, 398 * 5, 48 * 5, 67 * 5)), # imagem default
+    )
+    save2B.draw(screen)
+
+    save3B = Button((1125, 460), # posição
+                        (48 * 5, 67 * 5), # tamanho
+                        (cursors, (511 * 5, 398 * 5, 48 * 5, 67 * 5)), # imagem default
+    )
+    save3B.draw(screen)
 
 
     buttonback = Button((1755, 1005),  # posição
@@ -412,14 +429,27 @@ def saves(running = True):
                 pygame.quit()
                 exit()
 
-            if save1.is_clicked(ev):
-                continue
+            if save1B.is_clicked(ev):
+                gameData = save1
+                while not s.checkWin(gameData):
+                    s.autoSave(gameData)
+                    mostrarBoard(gameData)
+                win(gameData)
 
-            if save2.is_clicked(ev):
-                continue
 
-            if save3.is_clicked(ev):
-                continue
+            if save2B.is_clicked(ev):
+                gameData = save2
+                while not s.checkWin(gameData):
+                    s.autoSave(gameData)
+                    mostrarBoard(gameData)
+                win(gameData)
+
+            if save3B.is_clicked(ev):
+                gameData = save3
+                while not s.checkWin(gameData):
+                    s.autoSave(gameData)
+                    mostrarBoard(gameData)
+                win(gameData)
 
             if muteButton.is_clicked(ev):
                 toggleMusic()
